@@ -7,11 +7,21 @@ public class Server implements Runnable {
 	private boolean isRunning = true;
 	private boolean hasShutDown = false;
 	private ConsoleCommandReader conReader;
+	private NetServerManager serverManager;
 
 	@Override
 	public void run() {
 		instance = this;
 		conReader = new ConsoleCommandReader();
+		try {
+			if (!startServer()) {
+				isRunning = false;
+			}
+		} catch (Exception ex) {
+			System.err.println("Unexpected exception while starting the server: " + ex.getMessage());
+			ex.printStackTrace();
+			isRunning = false;
+		}
 
 		while (isRunning) {
 			try {
@@ -24,6 +34,8 @@ public class Server implements Runnable {
 	}
 
 	public boolean startServer() {
+		serverManager = new NetServerManager(this);
+		
 		return true;
 	}
 
@@ -52,5 +64,4 @@ public class Server implements Runnable {
 	public static Server getInstance() {
 		return instance;
 	}
-
 }
