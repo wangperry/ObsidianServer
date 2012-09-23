@@ -18,3 +18,6 @@
 
 # jars
 *.jar
+
+# stuff
+config.txt

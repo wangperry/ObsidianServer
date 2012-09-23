@@ -30,7 +30,7 @@ public class Configuration {
 		if (!file.exists()) {
 			System.out.println("Creating new config file...");
 
-			file.mkdirs();
+			file.getParentFile().mkdirs();
 
 			try {
 				file.createNewFile();
@@ -70,6 +70,8 @@ public class Configuration {
 
 				values.put(name, value);
 			}
+
+			reader.close();
 		} catch (IOException e) {
 			System.err.println("Failed loading config!");
 			e.printStackTrace();
@@ -79,7 +81,9 @@ public class Configuration {
 
 	public void saveConfig() {
 		if (!file.exists()) {
-			file.mkdirs();
+			System.out.println("Creating new config file...");
+
+			file.getParentFile().mkdirs();
 
 			try {
 				file.createNewFile();
@@ -114,6 +118,9 @@ public class Configuration {
 
 				writer.newLine();
 			}
+
+			writer.flush();
+			writer.close();
 		} catch (IOException e) {
 			System.err.println("Failed saving config!");
 			e.printStackTrace();
