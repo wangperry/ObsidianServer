@@ -13,7 +13,7 @@ public class ServerLauncher {
 
 		while (instance.isRunning() && serverThread.isAlive()) {
 			try {
-				Thread.sleep(5000L);
+				Thread.sleep(500L);
 			} catch (InterruptedException e) {
 				System.out.println("Error while sleeping!");
 				e.printStackTrace();

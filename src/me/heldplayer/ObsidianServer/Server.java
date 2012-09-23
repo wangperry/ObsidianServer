@@ -1,5 +1,10 @@
 package me.heldplayer.ObsidianServer;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.InetAddress;
+
+import me.heldplayer.ObsidianServer.util.Configuration;
 import me.heldplayer.ObsidianServer.util.ConsoleCommandReader;
 
 public class Server implements Runnable {
@@ -8,6 +13,7 @@ public class Server implements Runnable {
 	private boolean hasShutDown = false;
 	private ConsoleCommandReader conReader;
 	private NetServerManager serverManager;
+	private Configuration config;
 
 	@Override
 	public void run() {
@@ -31,10 +37,25 @@ public class Server implements Runnable {
 				e.printStackTrace();
 			}
 		}
+
+		shutdown();
 	}
 
-	public boolean startServer() {
-		serverManager = new NetServerManager(this);
+	public boolean startServer() throws IOException {
+		config = new Configuration(new File("config.txt"));
+
+		String addr = config.getString("host-name", "");
+
+		InetAddress inetAddr = null;
+
+		if (addr.length() > 0)
+			inetAddr = InetAddress.getByName(addr);
+
+		int port = config.getInt("port", 7777);
+
+		System.out.println("Starting the server on " + (addr != "" ? addr : "*") + "; port = " + port);
+
+		serverManager = new NetServerManager(this, port, inetAddr);
 
 		return true;
 	}
@@ -43,14 +64,18 @@ public class Server implements Runnable {
 		while (!conReader.consoleCommands.isEmpty()) {
 			String command = conReader.consoleCommands.remove(0);
 			System.out.println("Command: " + command);
+
+			if (command.equalsIgnoreCase("stop"))
+				initiateShutdown();
 		}
 
 		return true;
 	}
 
 	protected void shutdown() {
-		isRunning = false;
 		System.out.println("Shutting down server...");
+
+		serverManager.stopConnection();
 	}
 
 	public void initiateShutdown() {
