@@ -66,7 +66,7 @@ public class Configuration {
 
 				String name = line.substring(0, index);
 
-				String value = line.substring(index);
+				String value = line.substring(index + 1);
 
 				values.put(name, value);
 			}
