@@ -28,6 +28,8 @@ public class Configuration {
 
 	public void loadConfig() {
 		if (!file.exists()) {
+			System.out.println("Creating new config file...");
+
 			file.mkdirs();
 
 			try {
@@ -53,6 +55,9 @@ public class Configuration {
 		try {
 			while ((line = reader.readLine()) != null) {
 				line = line.trim();
+
+				if (line.startsWith("#"))
+					continue;
 
 				int index = line.indexOf("=");
 
