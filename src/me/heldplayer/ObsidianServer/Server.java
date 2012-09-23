@@ -35,7 +35,7 @@ public class Server implements Runnable {
 
 	public boolean startServer() {
 		serverManager = new NetServerManager(this);
-		
+
 		return true;
 	}
 
