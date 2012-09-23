@@ -1,6 +1,6 @@
 package me.heldplayer.ObsidianServer;
 
-import me.heldplayer.ObsidianServer.console.ConsoleCommandReader;
+import me.heldplayer.ObsidianServer.util.ConsoleCommandReader;
 
 public class Server implements Runnable {
 	private static Server instance = null;

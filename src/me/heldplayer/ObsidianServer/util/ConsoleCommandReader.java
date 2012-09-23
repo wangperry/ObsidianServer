@@ -1,4 +1,4 @@
-package me.heldplayer.ObsidianServer.console;
+package me.heldplayer.ObsidianServer.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
