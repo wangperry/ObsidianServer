@@ -18,7 +18,7 @@ public class ConnectionListenThread extends Thread {
 
 		this.serverSocket = new ServerSocket(port, 0, addr);
 
-		isListening = true;
+		this.isListening = true;
 	}
 
 	@Override
@@ -29,11 +29,9 @@ public class ConnectionListenThread extends Thread {
 
 				NetServerChild child = null;
 				try {
-					child = new NetServerChild(socket, manager);
+					int slot = manager.getNextAvailableSlot();
 
-					synchronized (manager.children) {
-						manager.children.add(child);
-					}
+					child = new NetServerChild(socket, manager, slot);
 				} catch (IOException e) {
 					DataOutputStream output = new DataOutputStream(socket.getOutputStream());
 

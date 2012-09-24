@@ -11,7 +11,7 @@ public abstract class AnonymousThread extends Thread {
 
 	@Override
 	public void run() {
-		while (isRunning) {
+		while (this.isRunning) {
 			runTask();
 
 			try {

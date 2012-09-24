@@ -15,6 +15,7 @@ public class Server implements Runnable {
 	private NetServerManager serverManager;
 	private Configuration config;
 	public String password = "";
+	public int slots = 0;
 
 	@Override
 	public void run() {
@@ -44,8 +45,9 @@ public class Server implements Runnable {
 
 	public boolean startServer() throws IOException {
 		config = new Configuration(new File("config.txt"));
-		
+
 		password = config.getString("password", "");
+		slots = config.getInt("slots", 8);
 
 		String addr = config.getString("host-name", "");
 

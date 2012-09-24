@@ -6,34 +6,25 @@ import me.heldplayer.ObsidianServer.NetServerChild;
 import me.heldplayer.ObsidianServer.util.LittleEndianInputStream;
 import me.heldplayer.ObsidianServer.util.LittleEndianOutputStream;
 
-public class Packet02DisconnectError extends Packet {
-	private String message = "";
-
-	public Packet02DisconnectError() {
-		id = (byte) 2;
+public class Packet37RequestPassword extends Packet {
+	public Packet37RequestPassword() {
+		id = (byte) 37;
 	}
 
 	@Override
 	public void readPacket(LittleEndianInputStream input) throws IOException {
 		throw new UnsupportedOperationException("Server cannot recieve this packet");
-
 	}
 
 	@Override
 	public void writePacket(LittleEndianOutputStream output) throws IOException {
-		setLength(message.length() + 1);
+		setLength(1);
 
 		super.writePacket(output);
-
-		output.writeBytes(message);
 	}
 
 	@Override
 	public void handlePacket(NetServerChild child) {
-	}
-	
-	public void setMessage(String message) {
-		this.message = message;
 	}
 
 }

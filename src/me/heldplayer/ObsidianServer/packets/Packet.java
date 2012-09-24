@@ -83,5 +83,8 @@ public abstract class Packet {
 	static {
 		packetMapping.put(1, Packet01ConnectRequest.class);
 		packetMapping.put(2, Packet02DisconnectError.class);
+		packetMapping.put(3, Packet03ContinueConnecting.class);
+		packetMapping.put(37, Packet37RequestPassword.class);
+		packetMapping.put(38, Packet38PasswordResponse.class);
 	}
 }

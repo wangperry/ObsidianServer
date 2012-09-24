@@ -6,11 +6,11 @@ import me.heldplayer.ObsidianServer.NetServerChild;
 import me.heldplayer.ObsidianServer.util.LittleEndianInputStream;
 import me.heldplayer.ObsidianServer.util.LittleEndianOutputStream;
 
-public class Packet01ConnectRequest extends Packet {
-	private String version = "";
+public class Packet38PasswordResponse extends Packet {
+	private String password = "";
 
-	public Packet01ConnectRequest() {
-		this.id = (byte) 1;
+	public Packet38PasswordResponse() {
+		id = (byte) 1;
 	}
 
 	@Override
@@ -19,7 +19,7 @@ public class Packet01ConnectRequest extends Packet {
 
 		input.read(buffer);
 
-		this.version = new String(buffer);
+		password = new String(buffer);
 	}
 
 	@Override
@@ -29,22 +29,16 @@ public class Packet01ConnectRequest extends Packet {
 
 	@Override
 	public void handlePacket(NetServerChild child) {
-		if (!this.version.equalsIgnoreCase("Terraria39")) {
-			child.disconnect("Incompatible server and client");
+		String password = child.getServer().password;
+
+		if (!password.equalsIgnoreCase(this.password)) {
+			child.disconnect("Invalid Password!");
 		} else {
-			String password = child.getServer().password;
+			Packet03ContinueConnecting packet = new Packet03ContinueConnecting();
 
-			if (password.equalsIgnoreCase("")) {
-				Packet03ContinueConnecting packet = new Packet03ContinueConnecting();
+			packet.setSlot(child.getSlot());
 
-				packet.setSlot(child.getSlot());
-
-				child.addToQeue(packet);
-			} else {
-				Packet37RequestPassword packet = new Packet37RequestPassword();
-
-				child.addToQeue(packet);
-			}
+			child.addToQeue(packet);
 		}
 	}
 

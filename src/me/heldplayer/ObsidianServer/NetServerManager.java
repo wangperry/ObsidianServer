@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import me.heldplayer.ObsidianServer.packets.Packet;
 
 public class NetServerManager {
-	protected volatile ArrayList<NetServerChild> children;
 	private Server server;
 	private ConnectionListenThread listenThread;
+	protected NetServerChild[] slots;
 
 	public NetServerManager(Server server, int port, InetAddress address) throws IOException {
 		this.server = server;
-		this.children = new ArrayList<NetServerChild>();
+		slots = new NetServerChild[server.slots];
 
 		this.listenThread = new ConnectionListenThread(this, port, address);
 		this.listenThread.setDaemon(true);
@@ -25,10 +25,16 @@ public class NetServerManager {
 	}
 
 	protected void processConnections() {
-		ArrayList<NetServerChild> children = new ArrayList<NetServerChild>();
-		children.addAll(this.children);
+		int index = 0;
 
-		for (NetServerChild child : children) {
+		for (NetServerChild child : slots) {
+			if (child == null) {
+				continue;
+			}
+			if (!child.isConnected()) {
+				slots[index] = null;
+			}
+
 			try {
 				if (child.hasPackets()) {
 					Packet packet = child.getNextPacket();
@@ -40,6 +46,20 @@ public class NetServerManager {
 
 				ex.printStackTrace();
 			}
+
+			index++;
 		}
+	}
+
+	public final Server getServer() {
+		return server;
+	}
+
+	public final int getNextAvailableSlot() {
+		for (int i = 0; i < slots.length; i++) {
+			if (slots[i] == null)
+				return i;
+		}
+		return -1;
 	}
 }

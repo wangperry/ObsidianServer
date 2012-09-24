@@ -20,12 +20,14 @@ public class NetServerChild {
 	private AnonymousThread inThread;
 	private AnonymousThread outThread;
 	private final NetServerManager manager;
+	private final int slot;
 
-	public NetServerChild(Socket socket, NetServerManager manager) throws IOException {
+	public NetServerChild(Socket socket, NetServerManager manager, int slot) throws IOException {
 		this.socket = socket;
 		this.inQeue = new ArrayList<Packet>();
 		this.outQeue = new ArrayList<Packet>();
 		this.manager = manager;
+		this.slot = slot;
 
 		this.input = new LittleEndianInputStream(this.socket.getInputStream());
 		this.output = new LittleEndianOutputStream(this.socket.getOutputStream());
@@ -49,10 +51,12 @@ public class NetServerChild {
 			}
 		};
 
-		inThread.setDaemon(true);
-		outThread.setDaemon(true);
-		inThread.start();
-		outThread.start();
+		this.inThread.setDaemon(true);
+		this.outThread.setDaemon(true);
+		this.inThread.start();
+		this.outThread.start();
+
+		this.manager.slots[this.slot] = this;
 	}
 
 	public boolean hasPackets() {
@@ -70,11 +74,16 @@ public class NetServerChild {
 
 			Packet packet = Packet.getPacket(id);
 
-			packet.setLength(size);
+			if (packet == null) {
+				System.out.println("Unkown Packet ID: " + id);
+				disconnect("Unknown Packet ID");
+			} else {
+				packet.setLength(size);
 
-			packet.readPacket(input);
+				packet.readPacket(input);
 
-			inQeue.add(packet);
+				inQeue.add(packet);
+			}
 		}
 	}
 
@@ -111,8 +120,6 @@ public class NetServerChild {
 
 		boolean flag = false;
 
-		manager.children.remove(this);
-
 		try {
 			packet.writePacket(output);
 			flag = true;
@@ -133,4 +140,13 @@ public class NetServerChild {
 	public final boolean isConnected() {
 		return isConnected;
 	}
+
+	public final Server getServer() {
+		return manager.getServer();
+	}
+
+	public int getSlot() {
+		return slot;
+	}
+
 }
