@@ -1,10 +1,12 @@
 package me.heldplayer.ObsidianServer;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import me.heldplayer.ObsidianServer.packets.Packet02DisconnectError;
+import me.heldplayer.ObsidianServer.util.LittleEndianOutputStream;
 
 public class ConnectionListenThread extends Thread {
 	private final NetServerManager manager;
@@ -27,15 +29,40 @@ public class ConnectionListenThread extends Thread {
 			try {
 				Socket socket = this.serverSocket.accept();
 
-				NetServerChild child = null;
 				try {
 					int slot = manager.getNextAvailableSlot();
 
-					child = new NetServerChild(socket, manager, slot);
-				} catch (IOException e) {
-					DataOutputStream output = new DataOutputStream(socket.getOutputStream());
+					if (slot == -1) {
+						Packet02DisconnectError packet = new Packet02DisconnectError();
 
-					output.writeInt(0);
+						packet.setMessage("Server is full");
+
+						LittleEndianOutputStream output = new LittleEndianOutputStream(socket.getOutputStream());
+
+						packet.writePacket(output);
+
+						output.close();
+
+						socket.close();
+
+						continue;
+					}
+
+					new NetServerChild(socket, manager, slot);
+				} catch (IOException e) {
+					Packet02DisconnectError packet = new Packet02DisconnectError();
+
+					packet.setMessage("Internal Server Exception");
+
+					LittleEndianOutputStream output = new LittleEndianOutputStream(socket.getOutputStream());
+
+					packet.writePacket(output);
+
+					output.close();
+
+					socket.close();
+
+					continue;
 				}
 			} catch (Exception e) {
 			}

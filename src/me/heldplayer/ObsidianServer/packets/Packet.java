@@ -34,7 +34,7 @@ public abstract class Packet {
 	public final void setLength(int length) {
 		this.length = length;
 	}
-	
+
 	public byte getId() {
 		return id;
 	}
@@ -84,7 +84,13 @@ public abstract class Packet {
 		packetMapping.put(1, Packet01ConnectRequest.class);
 		packetMapping.put(2, Packet02DisconnectError.class);
 		packetMapping.put(3, Packet03ContinueConnecting.class);
+		packetMapping.put(4, Packet04PlayerAppearance.class);
+		packetMapping.put(5, Packet05PlayerInventory.class);
+		packetMapping.put(6, Packet06RequestWorldInfo.class);
+		packetMapping.put(16, Packet16PlayerHealth.class);
 		packetMapping.put(37, Packet37RequestPassword.class);
 		packetMapping.put(38, Packet38PasswordResponse.class);
+		packetMapping.put(42, Packet42PlayerMana.class);
+		packetMapping.put(50, Packet50PlayerBuffs.class);
 	}
 }

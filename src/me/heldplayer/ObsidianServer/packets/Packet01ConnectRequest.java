@@ -3,8 +3,10 @@ package me.heldplayer.ObsidianServer.packets;
 import java.io.IOException;
 
 import me.heldplayer.ObsidianServer.NetServerChild;
+import me.heldplayer.ObsidianServer.Server;
 import me.heldplayer.ObsidianServer.util.LittleEndianInputStream;
 import me.heldplayer.ObsidianServer.util.LittleEndianOutputStream;
+import me.heldplayer.ObsidianServer.util.PlayerState;
 
 public class Packet01ConnectRequest extends Packet {
 	private String version = "";
@@ -29,10 +31,13 @@ public class Packet01ConnectRequest extends Packet {
 
 	@Override
 	public void handlePacket(NetServerChild child) {
+		if (child.playerState != PlayerState.Connected)
+			throw new UnsupportedOperationException("Client cannot send this packet at this time");
+
 		if (!this.version.equalsIgnoreCase("Terraria39")) {
 			child.disconnect("Incompatible server and client");
 		} else {
-			String password = child.getServer().password;
+			String password = Server.getInstance().password;
 
 			if (password.equalsIgnoreCase("")) {
 				Packet03ContinueConnecting packet = new Packet03ContinueConnecting();
@@ -40,6 +45,8 @@ public class Packet01ConnectRequest extends Packet {
 				packet.setSlot(child.getSlot());
 
 				child.addToQeue(packet);
+
+				child.playerState = PlayerState.Initializing;
 			} else {
 				Packet37RequestPassword packet = new Packet37RequestPassword();
 

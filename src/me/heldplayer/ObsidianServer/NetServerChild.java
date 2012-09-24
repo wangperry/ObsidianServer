@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import me.heldplayer.ObsidianServer.entities.Player;
 import me.heldplayer.ObsidianServer.packets.Packet;
 import me.heldplayer.ObsidianServer.packets.Packet02DisconnectError;
 import me.heldplayer.ObsidianServer.util.AnonymousThread;
 import me.heldplayer.ObsidianServer.util.LittleEndianInputStream;
 import me.heldplayer.ObsidianServer.util.LittleEndianOutputStream;
+import me.heldplayer.ObsidianServer.util.PlayerState;
 
 public class NetServerChild {
 	private Socket socket;
@@ -21,6 +23,8 @@ public class NetServerChild {
 	private AnonymousThread outThread;
 	private final NetServerManager manager;
 	private final int slot;
+	public PlayerState playerState = PlayerState.Connected;
+	public Player player = null;
 
 	public NetServerChild(Socket socket, NetServerManager manager, int slot) throws IOException {
 		this.socket = socket;
@@ -32,7 +36,7 @@ public class NetServerChild {
 		this.input = new LittleEndianInputStream(this.socket.getInputStream());
 		this.output = new LittleEndianOutputStream(this.socket.getOutputStream());
 
-		this.inThread = new AnonymousThread("Network Reader Thread") {
+		this.inThread = new AnonymousThread("Network Reader Thread; slot " + slot) {
 
 			@Override
 			public void runTask() {
@@ -43,7 +47,7 @@ public class NetServerChild {
 				}
 			}
 		};
-		this.outThread = new AnonymousThread("Network Writer Thread") {
+		this.outThread = new AnonymousThread("Network Writer Thread; slot " + slot) {
 
 			@Override
 			public void runTask() {
@@ -141,12 +145,12 @@ public class NetServerChild {
 		return isConnected;
 	}
 
-	public final Server getServer() {
-		return manager.getServer();
-	}
-
 	public int getSlot() {
 		return slot;
+	}
+
+	public void broadcastPacket(Packet packet) {
+		this.manager.broadcastPacket(packet);
 	}
 
 }

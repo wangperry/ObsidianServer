@@ -6,6 +6,7 @@ import java.net.InetAddress;
 
 import me.heldplayer.ObsidianServer.util.Configuration;
 import me.heldplayer.ObsidianServer.util.ConsoleCommandReader;
+import me.heldplayer.ObsidianServer.world.World;
 
 public class Server implements Runnable {
 	private static Server instance = null;
@@ -16,6 +17,7 @@ public class Server implements Runnable {
 	private Configuration config;
 	public String password = "";
 	public int slots = 0;
+	public World world;
 
 	@Override
 	public void run() {
@@ -44,23 +46,48 @@ public class Server implements Runnable {
 	}
 
 	public boolean startServer() throws IOException {
-		config = new Configuration(new File("config.txt"));
+		this.config = new Configuration(new File("config.txt"));
 
-		password = config.getString("password", "");
-		slots = config.getInt("slots", 8);
+		//--- Password
+		this.password = this.config.getString("password", "");
 
-		String addr = config.getString("host-name", "");
+		//--- Slots
+		this.slots = this.config.getInt("slots", 8);
+
+		if (this.slots <= 0 || this.slots >= 255) {
+			this.slots = 8;
+			this.config.set("slots", 7777);
+		}
+
+		//--- Bind address
+		String addr = this.config.getString("host-name", "");
 
 		InetAddress inetAddr = null;
 
-		if (addr.length() > 0)
+		if (addr.isEmpty())
 			inetAddr = InetAddress.getByName(addr);
 
-		int port = config.getInt("port", 7777);
+		//--- Port
+		int port = this.config.getInt("port", 7777);
 
-		System.out.println("Starting the server on " + (!addr.equalsIgnoreCase("") ? addr : "*") + "; port = " + port);
+		if (port <= 0) {
+			port = 7777;
+			this.config.set("port", 7777);
+		}
 
-		serverManager = new NetServerManager(this, port, inetAddr);
+		System.out.println("Starting the server on " + (!addr.isEmpty() ? addr : "*") + "; port = " + port);
+
+		this.serverManager = new NetServerManager(this, port, inetAddr);
+
+		//--- World
+		String world = this.config.getString("world", "world");
+
+		if (world.isEmpty()) {
+			world = "world";
+			this.config.set("world", "world");
+		}
+
+		this.world = new World(new File(world));
 
 		return true;
 	}
@@ -95,5 +122,9 @@ public class Server implements Runnable {
 
 	public static Server getInstance() {
 		return instance;
+	}
+	
+	public World getWorld() {
+		return world;
 	}
 }

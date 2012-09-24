@@ -3,8 +3,10 @@ package me.heldplayer.ObsidianServer.packets;
 import java.io.IOException;
 
 import me.heldplayer.ObsidianServer.NetServerChild;
+import me.heldplayer.ObsidianServer.Server;
 import me.heldplayer.ObsidianServer.util.LittleEndianInputStream;
 import me.heldplayer.ObsidianServer.util.LittleEndianOutputStream;
+import me.heldplayer.ObsidianServer.util.PlayerState;
 
 public class Packet38PasswordResponse extends Packet {
 	private String password = "";
@@ -29,7 +31,10 @@ public class Packet38PasswordResponse extends Packet {
 
 	@Override
 	public void handlePacket(NetServerChild child) {
-		String password = child.getServer().password;
+		if (child.playerState != PlayerState.Connected)
+			throw new UnsupportedOperationException("Client cannot send this packet at this time");
+
+		String password = Server.getInstance().password;
 
 		if (!password.equalsIgnoreCase(this.password)) {
 			child.disconnect("Invalid Password!");
@@ -39,6 +44,8 @@ public class Packet38PasswordResponse extends Packet {
 			packet.setSlot(child.getSlot());
 
 			child.addToQeue(packet);
+
+			child.playerState = PlayerState.Initializing;
 		}
 	}
 
