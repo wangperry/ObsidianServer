@@ -64,9 +64,9 @@ public class Configuration {
 				if (index <= 0)
 					continue;
 
-				String name = line.substring(0, index);
+				String name = line.substring(0, index).trim();
 
-				String value = line.substring(index + 1);
+				String value = line.substring(index + 1).trim();
 
 				values.put(name, value);
 			}

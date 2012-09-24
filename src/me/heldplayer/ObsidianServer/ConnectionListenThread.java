@@ -12,6 +12,8 @@ public class ConnectionListenThread extends Thread {
 	private final ServerSocket serverSocket;
 
 	public ConnectionListenThread(NetServerManager manager, int port, InetAddress addr) throws IOException {
+		super("Master connection thread");
+
 		this.manager = manager;
 
 		this.serverSocket = new ServerSocket(port, 0, addr);
@@ -27,15 +29,15 @@ public class ConnectionListenThread extends Thread {
 
 				NetServerChild child = null;
 				try {
-					child = new NetServerChild(socket);
+					child = new NetServerChild(socket, manager);
+
+					synchronized (manager.children) {
+						manager.children.add(child);
+					}
 				} catch (IOException e) {
 					DataOutputStream output = new DataOutputStream(socket.getOutputStream());
 
 					output.writeInt(0);
-				}
-
-				synchronized (manager.children) {
-					manager.children.add(child);
 				}
 			} catch (Exception e) {
 			}

@@ -14,6 +14,7 @@ public class Server implements Runnable {
 	private ConsoleCommandReader conReader;
 	private NetServerManager serverManager;
 	private Configuration config;
+	public String password = "";
 
 	@Override
 	public void run() {
@@ -43,6 +44,8 @@ public class Server implements Runnable {
 
 	public boolean startServer() throws IOException {
 		config = new Configuration(new File("config.txt"));
+		
+		password = config.getString("password", "");
 
 		String addr = config.getString("host-name", "");
 
@@ -53,7 +56,7 @@ public class Server implements Runnable {
 
 		int port = config.getInt("port", 7777);
 
-		System.out.println("Starting the server on " + (addr != "" ? addr : "*") + "; port = " + port);
+		System.out.println("Starting the server on " + (!addr.equalsIgnoreCase("") ? addr : "*") + "; port = " + port);
 
 		serverManager = new NetServerManager(this, port, inetAddr);
 
@@ -68,6 +71,8 @@ public class Server implements Runnable {
 			if (command.equalsIgnoreCase("stop"))
 				initiateShutdown();
 		}
+
+		serverManager.processConnections();
 
 		return true;
 	}
