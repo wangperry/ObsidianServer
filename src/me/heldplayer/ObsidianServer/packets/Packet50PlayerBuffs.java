@@ -12,7 +12,7 @@ public class Packet50PlayerBuffs extends Packet {
 	private byte[] buffs = new byte[10];
 
 	public Packet50PlayerBuffs() {
-		this.id = (byte) 1;
+		this.id = (byte) 50;
 	}
 
 	@Override

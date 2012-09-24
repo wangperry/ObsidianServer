@@ -15,7 +15,7 @@ public class Packet05PlayerInventory extends Packet {
 	private short itemId = 0;
 
 	public Packet05PlayerInventory() {
-		this.id = (byte) 1;
+		this.id = (byte) 5;
 	}
 
 	@Override

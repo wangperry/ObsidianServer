@@ -13,7 +13,7 @@ public class Packet42PlayerMana extends Packet {
 	private short maxMana = 0;
 
 	public Packet42PlayerMana() {
-		this.id = (byte) 1;
+		this.id = (byte) 42;
 	}
 
 	@Override

@@ -16,7 +16,6 @@ public class Packet02DisconnectError extends Packet {
 	@Override
 	public void readPacket(LittleEndianInputStream input) throws IOException {
 		throw new UnsupportedOperationException("Server cannot recieve this packet");
-
 	}
 
 	@Override

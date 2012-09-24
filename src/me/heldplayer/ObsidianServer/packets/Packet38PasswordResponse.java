@@ -12,7 +12,7 @@ public class Packet38PasswordResponse extends Packet {
 	private String password = "";
 
 	public Packet38PasswordResponse() {
-		id = (byte) 1;
+		id = (byte) 38;
 	}
 
 	@Override

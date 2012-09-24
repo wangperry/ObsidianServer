@@ -13,7 +13,7 @@ public class Packet16PlayerHealth extends Packet {
 	private short maxHealth = 0;
 
 	public Packet16PlayerHealth() {
-		this.id = (byte) 1;
+		this.id = (byte) 16;
 	}
 
 	@Override

@@ -24,7 +24,7 @@ public class Packet04PlayerAppearance extends Packet {
 	private String playerName = "";
 
 	public Packet04PlayerAppearance() {
-		this.id = (byte) 1;
+		this.id = (byte) 4;
 	}
 
 	@Override
