@@ -5,28 +5,27 @@ import java.io.IOException;
 import me.heldplayer.ObsidianServer.NetServerChild;
 import me.heldplayer.ObsidianServer.util.LittleEndianInputStream;
 import me.heldplayer.ObsidianServer.util.LittleEndianOutputStream;
-import me.heldplayer.ObsidianServer.util.PlayerState;
 
 public class Packet50PlayerBuffs extends Packet {
-	private byte playerSlot = 0;
-	private byte[] buffs = new byte[10];
+	private int playerSlot = 0;
+	private int[] buffs = new int[10];
 
 	public Packet50PlayerBuffs() {
-		this.id = (byte) 50;
+		this.id = 50;
 	}
 
 	@Override
 	public void readPacket(LittleEndianInputStream input) throws IOException {
-		this.playerSlot = input.readByte();
+		this.playerSlot = input.readUnsignedByte();
 
 		for (int i = 0; i < 10; i++) {
-			buffs[i] = input.readByte();
+			buffs[i] = input.readUnsignedByte();
 		}
 	}
 
 	@Override
 	public void writePacket(LittleEndianOutputStream output) throws IOException {
-		setLength(6);
+		setLength(12);
 
 		super.writePacket(output);
 
@@ -39,14 +38,11 @@ public class Packet50PlayerBuffs extends Packet {
 
 	@Override
 	public void handlePacket(NetServerChild child) {
-		if (child.playerState != PlayerState.Initializing)
-			throw new UnsupportedOperationException("Client cannot send this packet at this time");
-
 		for (int i = 0; i < 10; i++) {
-			System.out.println("Buff " + i + ": " + buffs[i]);
+			//System.out.println("Buff " + i + ": " + buffs[i]);
 		}
 
-		child.broadcastPacket(this);
+		//child.broadcastPacket(this);
 	}
 
 }

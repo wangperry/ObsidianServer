@@ -10,9 +10,9 @@ public class LittleEndianOutputStream extends OutputStream implements DataOutput
 	private DataOutputStream dataOutputSteam;
 	private OutputStream outputStream;
 
-	public LittleEndianOutputStream(OutputStream in) {
-		this.outputStream = in;
-		this.dataOutputSteam = new DataOutputStream(in);
+	public LittleEndianOutputStream(OutputStream out) {
+		this.outputStream = out;
+		this.dataOutputSteam = new DataOutputStream(out);
 	}
 
 	public final void close() throws IOException {

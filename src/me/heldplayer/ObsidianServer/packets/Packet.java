@@ -10,7 +10,7 @@ import me.heldplayer.ObsidianServer.util.LittleEndianInputStream;
 import me.heldplayer.ObsidianServer.util.LittleEndianOutputStream;
 
 public abstract class Packet {
-	protected byte id;
+	protected int id;
 	protected int length = 0;
 
 	// Byte == writeByte() | byte
@@ -35,7 +35,7 @@ public abstract class Packet {
 		this.length = length;
 	}
 
-	public byte getId() {
+	public int getId() {
 		return id;
 	}
 
@@ -75,7 +75,6 @@ public abstract class Packet {
 				return null;
 			}
 		} else {
-			// TODO: unknown packet ID!
 			return null;
 		}
 	}
@@ -87,10 +86,17 @@ public abstract class Packet {
 		packetMapping.put(4, Packet04PlayerAppearance.class);
 		packetMapping.put(5, Packet05PlayerInventory.class);
 		packetMapping.put(6, Packet06RequestWorldInfo.class);
+		packetMapping.put(7, Packet07WorldInfo.class);
+		packetMapping.put(8, Packet08RequestTileData.class);
+		packetMapping.put(9, Packet09StatusbarText.class);
+		packetMapping.put(10, Packet10TileRowData.class);
+		packetMapping.put(11, Packet11RecalculateAreaUV.class);
+		packetMapping.put(12, Packet12SpawnPlayer.class);
 		packetMapping.put(16, Packet16PlayerHealth.class);
 		packetMapping.put(37, Packet37RequestPassword.class);
 		packetMapping.put(38, Packet38PasswordResponse.class);
 		packetMapping.put(42, Packet42PlayerMana.class);
+		packetMapping.put(49, Packet49PlayerFirstSpawn.class);
 		packetMapping.put(50, Packet50PlayerBuffs.class);
 	}
 }

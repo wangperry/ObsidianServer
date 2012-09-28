@@ -74,19 +74,23 @@ public class NetServerChild {
 	public void readPackets() throws IOException {
 		while (input.available() > 0) {
 			int size = input.readInt();
-			byte id = input.readByte();
+			int id = input.readUnsignedByte();
 
 			Packet packet = Packet.getPacket(id);
 
 			if (packet == null) {
 				System.out.println("Unkown Packet ID: " + id);
-				disconnect("Unknown Packet ID");
+				disconnect("Unknown Packet ID: " + id);
 			} else {
 				packet.setLength(size);
 
-				packet.readPacket(input);
+				try {
+					packet.readPacket(input);
 
-				inQeue.add(packet);
+					inQeue.add(packet);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
 			}
 		}
 	}

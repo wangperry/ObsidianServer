@@ -8,7 +8,7 @@ import me.heldplayer.ObsidianServer.util.LittleEndianOutputStream;
 
 public class Packet37RequestPassword extends Packet {
 	public Packet37RequestPassword() {
-		id = (byte) 37;
+		id = 37;
 	}
 
 	@Override

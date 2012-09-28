@@ -6,11 +6,12 @@ import me.heldplayer.ObsidianServer.NetServerChild;
 import me.heldplayer.ObsidianServer.util.LittleEndianInputStream;
 import me.heldplayer.ObsidianServer.util.LittleEndianOutputStream;
 
-public class Packet03ContinueConnecting extends Packet {
-	private int slot = 0;
+public class Packet09StatusbarText extends Packet {
+	public int messages = 0;
+	public String text = "";
 
-	public Packet03ContinueConnecting() {
-		id = 3;
+	public Packet09StatusbarText() {
+		id = 9;
 	}
 
 	@Override
@@ -20,19 +21,17 @@ public class Packet03ContinueConnecting extends Packet {
 
 	@Override
 	public void writePacket(LittleEndianOutputStream output) throws IOException {
-		setLength(2);
+		setLength(5 + text.length());
 
 		super.writePacket(output);
 
-		output.writeByte(slot);
+		output.writeInt(messages);
+
+		output.writeBytes(text);
 	}
 
 	@Override
 	public void handlePacket(NetServerChild child) {
-	}
-
-	public void setSlot(int slot) {
-		this.slot = slot;
 	}
 
 }

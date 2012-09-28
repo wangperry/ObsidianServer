@@ -8,28 +8,28 @@ import me.heldplayer.ObsidianServer.util.LittleEndianOutputStream;
 import me.heldplayer.ObsidianServer.util.PlayerState;
 
 public class Packet05PlayerInventory extends Packet {
-	private byte playerSlot = 0;
-	private byte inventorySlot = 0;
-	private byte itemStack = 0;
-	private byte itemPrefixId = 0;
+	private int playerSlot = 0;
+	private int inventorySlot = 0;
+	private int itemStack = 0;
+	private int itemPrefixId = 0;
 	private short itemId = 0;
 
 	public Packet05PlayerInventory() {
-		this.id = (byte) 5;
+		this.id = 5;
 	}
 
 	@Override
 	public void readPacket(LittleEndianInputStream input) throws IOException {
-		this.playerSlot = input.readByte();
-		this.inventorySlot = input.readByte();
-		this.itemStack = input.readByte();
-		this.itemPrefixId = input.readByte();
+		this.playerSlot = input.readUnsignedByte();
+		this.inventorySlot = input.readUnsignedByte();
+		this.itemStack = input.readUnsignedByte();
+		this.itemPrefixId = input.readUnsignedByte();
 		this.itemId = input.readShort();
 	}
 
 	@Override
 	public void writePacket(LittleEndianOutputStream output) throws IOException {
-		setLength(6);
+		setLength(7);
 
 		super.writePacket(output);
 
@@ -45,7 +45,7 @@ public class Packet05PlayerInventory extends Packet {
 		if (child.playerState != PlayerState.Initializing)
 			throw new UnsupportedOperationException("Client cannot send this packet at this time");
 
-		System.out.println("Player " + child.getSlot() + " inventory. Slot: " + inventorySlot + "; Stack: " + itemStack + "; PrefixId: " + itemPrefixId + "; Id: " + itemId);
+		//System.out.println("Player " + child.getSlot() + " inventory. Slot: " + inventorySlot + "; Stack: " + itemStack + "; PrefixId: " + itemPrefixId + "; Id: " + itemId);
 
 		child.broadcastPacket(this);
 	}

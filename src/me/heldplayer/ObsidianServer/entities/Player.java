@@ -6,17 +6,17 @@ import me.heldplayer.ObsidianServer.NetServerChild;
 public class Player {
 	public final NetServerChild child;
 
-	public byte playerSlot = 0;
-	public byte hairStyle = 0;
-	public byte gender = 0;
-	public byte[] hairColor = new byte[3];
-	public byte[] skinColor = new byte[3];
-	public byte[] eyeColor = new byte[3];
-	public byte[] shirtColor = new byte[3];
-	public byte[] undershirtColor = new byte[3];
-	public byte[] pantsColor = new byte[3];
-	public byte[] shoeColor = new byte[3];
-	public byte difficulty = 0;
+	public int playerSlot = 0;
+	public int hairStyle = 0;
+	public int gender = 0;
+	public int[] hairColor = new int[3];
+	public int[] skinColor = new int[3];
+	public int[] eyeColor = new int[3];
+	public int[] shirtColor = new int[3];
+	public int[] undershirtColor = new int[3];
+	public int[] pantsColor = new int[3];
+	public int[] shoeColor = new int[3];
+	public int difficulty = 0;
 	public String playerName = "";
 
 	public short health = 100;
@@ -24,12 +24,12 @@ public class Player {
 
 	public short mana = 0;
 	public short maxMana = 0;
-	
+
 	public ItemStack[] inventory;
 
 	public Player(NetServerChild child) {
 		this.child = child;
-		
+
 		this.inventory = new ItemStack[60];
 	}
 }

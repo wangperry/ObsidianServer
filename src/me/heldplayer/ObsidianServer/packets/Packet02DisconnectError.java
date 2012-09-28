@@ -10,7 +10,7 @@ public class Packet02DisconnectError extends Packet {
 	private String message = "";
 
 	public Packet02DisconnectError() {
-		id = (byte) 2;
+		id = 2;
 	}
 
 	@Override

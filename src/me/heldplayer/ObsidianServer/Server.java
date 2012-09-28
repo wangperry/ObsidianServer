@@ -3,6 +3,7 @@ package me.heldplayer.ObsidianServer;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.Calendar;
 
 import me.heldplayer.ObsidianServer.util.Configuration;
 import me.heldplayer.ObsidianServer.util.ConsoleCommandReader;
@@ -18,6 +19,8 @@ public class Server implements Runnable {
 	public String password = "";
 	public int slots = 0;
 	public World world;
+	public byte worldSize = 0;
+	public boolean isChristmas = false;
 
 	@Override
 	public void run() {
@@ -46,6 +49,16 @@ public class Server implements Runnable {
 	}
 
 	public boolean startServer() throws IOException {
+		//--- Christmas check
+		Calendar cal = Calendar.getInstance();
+		if (cal.get(Calendar.MONTH) == 12) {
+			int day = cal.get(Calendar.DAY_OF_MONTH);
+
+			if (day >= 15 && day <= 31)
+				this.isChristmas = true;
+		}
+
+		//--- Load config
 		this.config = new Configuration(new File("config.txt"));
 
 		//--- Password
@@ -80,6 +93,8 @@ public class Server implements Runnable {
 		this.serverManager = new NetServerManager(this, port, inetAddr);
 
 		//--- World
+		this.worldSize = (byte) this.config.getInt("world-size", 1);
+
 		String world = this.config.getString("world", "world");
 
 		if (world.isEmpty()) {
@@ -109,6 +124,8 @@ public class Server implements Runnable {
 	protected void shutdown() {
 		System.out.println("Shutting down server...");
 
+		world.saveWorld();
+
 		serverManager.stopConnection();
 	}
 
@@ -123,7 +140,7 @@ public class Server implements Runnable {
 	public static Server getInstance() {
 		return instance;
 	}
-	
+
 	public World getWorld() {
 		return world;
 	}

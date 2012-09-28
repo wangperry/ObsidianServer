@@ -8,17 +8,17 @@ import me.heldplayer.ObsidianServer.util.LittleEndianOutputStream;
 import me.heldplayer.ObsidianServer.util.PlayerState;
 
 public class Packet16PlayerHealth extends Packet {
-	private byte playerSlot = 0;
+	private int playerSlot = 0;
 	private short health = 0;
 	private short maxHealth = 0;
 
 	public Packet16PlayerHealth() {
-		this.id = (byte) 16;
+		this.id = 16;
 	}
 
 	@Override
 	public void readPacket(LittleEndianInputStream input) throws IOException {
-		this.playerSlot = input.readByte();
+		this.playerSlot = input.readUnsignedByte();
 		this.health = input.readShort();
 		this.maxHealth = input.readShort();
 	}

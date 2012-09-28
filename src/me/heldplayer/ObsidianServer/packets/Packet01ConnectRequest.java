@@ -12,7 +12,7 @@ public class Packet01ConnectRequest extends Packet {
 	private String version = "";
 
 	public Packet01ConnectRequest() {
-		this.id = (byte) 1;
+		this.id = 1;
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class Packet01ConnectRequest extends Packet {
 			throw new UnsupportedOperationException("Client cannot send this packet at this time");
 
 		if (!this.version.equalsIgnoreCase("Terraria39")) {
-			child.disconnect("Incompatible server and client");
+			child.disconnect("You are not using the same version as this server.");
 		} else {
 			String password = Server.getInstance().password;
 
