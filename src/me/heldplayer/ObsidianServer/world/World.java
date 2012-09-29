@@ -22,12 +22,12 @@ public class World {
 	private final File terrainFile;
 	public final WorldTerrainData terrainData;
 
-	public static float leftWorld = 0.0F;
-	public static float rightWorld = 134400.0F;
-	public static float topWorld = 0.0F;
-	public static float bottomWorld = 38400.0F;
-	public static int maxTilesX = (int) rightWorld / 16 + 1;
-	public static int maxTilesY = (int) bottomWorld / 16 + 1;
+	//public static float leftWorld = 0.0F;
+	//public static float rightWorld = 134400.0F;
+	//public static float topWorld = 0.0F;
+	//public static float bottomWorld = 38400.0F;
+	//public static int maxTilesX = (int) rightWorld / 16 + 1;
+	//public static int maxTilesY = (int) bottomWorld / 16 + 1;
 
 	public int gameTime = 0;
 	public int dayTime = 1; // Byte
@@ -35,19 +35,26 @@ public class World {
 	public int bloodMoon = 0; // Byte
 	public int mapWidth = 4200; // 1 = 4200; 2 = 6300; 3 = 8400
 	public int mapHeight = 1200;// 1 = 1200; 2 = 1800; 3 = 2400
+	public int sectionsX = mapWidth / 200;
+	public int sectionsY = mapHeight / 150;
 	public int spawnTileX = 128;
 	public int spawnTileY = 128;
-	public int groundLevelY = 128;
-	public int rockLayerY = 160;
+	public double groundLevelY = 128;
+	public double rockLayerY = 160;
 	public int worldId = 0;
 	public int flags = 0; // Byte
 	public String name = "world";
 	public int totalHallow = 0;
 	public int totalCorruption = 0;
 
-	public World(File dataFolder) throws IOException {
-		System.out.println("Initializing world...");
+	public boolean shadowOrbSmashed = false;
+	public boolean killedBoss1 = false; // The Big Eye
+	public boolean killedBoss2 = false; // The Big Worm
+	public boolean killedBoss3 = false; // The Big Old Man
+	public boolean hardMode = false;
+	public boolean killedBoss4 = false; // The Scary Man
 
+	public World(File dataFolder) throws IOException {
 		switch (Server.getInstance().worldSize) {
 		case 2:
 			this.mapWidth = 6300;
@@ -62,6 +69,9 @@ public class World {
 			this.mapHeight = 1200;
 			break;
 		}
+
+		this.sectionsX = mapWidth / 200;
+		this.sectionsY = mapHeight / 150;
 
 		this.dataFolder = dataFolder.getAbsoluteFile();
 
@@ -102,10 +112,6 @@ public class World {
 
 		this.playerList = new Player[254];
 		this.NPCList = new NPC[32767];
-
-		debug();
-
-		System.out.println("Done!");
 	}
 
 	public void debug() {
@@ -136,11 +142,17 @@ public class World {
 			output.writeInt(this.mapHeight);
 			output.writeInt(this.spawnTileX);
 			output.writeInt(this.spawnTileY);
-			output.writeInt(this.groundLevelY);
-			output.writeInt(this.rockLayerY);
+			output.writeDouble(this.groundLevelY);
+			output.writeDouble(this.rockLayerY);
 			output.writeInt(this.worldId);
 			output.writeByte(this.name.length());
 			output.writeBytes(this.name);
+			output.writeBoolean(this.shadowOrbSmashed);
+			output.writeBoolean(this.killedBoss1);
+			output.writeBoolean(this.killedBoss2);
+			output.writeBoolean(this.killedBoss3);
+			output.writeBoolean(this.hardMode);
+			output.writeBoolean(this.killedBoss4);
 
 			System.out.println("World info saved!");
 		} catch (FileNotFoundException e) {
@@ -174,13 +186,19 @@ public class World {
 			this.mapHeight = input.readInt();
 			this.spawnTileX = input.readInt();
 			this.spawnTileY = input.readInt();
-			this.groundLevelY = input.readInt();
-			this.rockLayerY = input.readInt();
+			this.groundLevelY = input.readDouble();
+			this.rockLayerY = input.readDouble();
 			this.worldId = input.readInt();
 			int nameSize = input.readUnsignedByte();
 			byte[] name = new byte[nameSize];
 			input.read(name);
 			this.name = new String(name);
+			this.shadowOrbSmashed = input.readBoolean();
+			this.killedBoss1 = input.readBoolean();
+			this.killedBoss2 = input.readBoolean();
+			this.killedBoss3 = input.readBoolean();
+			this.hardMode = input.readBoolean();
+			this.killedBoss4 = input.readBoolean();
 
 			System.out.println("World info loaded!");
 		} catch (FileNotFoundException e) {
@@ -224,5 +242,11 @@ public class World {
 		if (!(slot <= 0 || slot >= NPCList.length)) {
 			NPCList[slot] = npc;
 		}
+	}
+
+	public static int tile(int x, int y) {
+		World world = Server.getInstance().world;
+
+		return (x % world.mapWidth);
 	}
 }

@@ -36,8 +36,8 @@ public class Packet12SpawnPlayer extends Packet {
 
 	@Override
 	public void handlePacket(NetServerChild child) {
-		if (child.playerState != PlayerState.Initialized)
-			throw new UnsupportedOperationException("Client cannot send this packet at this time");
+		//if (child.playerState != PlayerState.Initialized)
+		//throw new UnsupportedOperationException("Client cannot send this packet at this time");
 
 		child.playerState = PlayerState.Playing;
 

@@ -21,11 +21,9 @@ public class Packet07WorldInfo extends Packet {
 
 	@Override
 	public void writePacket(LittleEndianOutputStream output) throws IOException {
-		setLength(36 + world.name.length());
+		setLength(37 + world.name.length());
 
 		super.writePacket(output);
-		
-		System.out.println("Sending world info!");
 
 		output.writeInt(world.gameTime);
 		output.writeByte(world.dayTime);
@@ -35,9 +33,20 @@ public class Packet07WorldInfo extends Packet {
 		output.writeInt(world.mapHeight);
 		output.writeInt(world.spawnTileX);
 		output.writeInt(world.spawnTileY);
-		output.writeInt(world.groundLevelY);
-		output.writeInt(world.rockLayerY);
+		output.writeInt((int) world.groundLevelY);
+		output.writeInt((int) world.rockLayerY);
 		output.writeInt(world.worldId);
+
+		byte flags = 0;
+		flags &= (world.shadowOrbSmashed ? 1 << 0 : 0);
+		flags &= (world.killedBoss1 ? 1 << 1 : 0);
+		flags &= (world.killedBoss2 ? 1 << 2 : 0);
+		flags &= (world.killedBoss3 ? 1 << 3 : 0);
+		flags &= (world.hardMode ? 1 << 4 : 0);
+		flags &= (world.killedBoss4 ? 1 << 5 : 0);
+
+		output.writeByte(flags);
+
 		output.writeBytes(world.name);
 	}
 

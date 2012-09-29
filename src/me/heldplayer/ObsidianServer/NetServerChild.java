@@ -25,6 +25,7 @@ public class NetServerChild {
 	private final int slot;
 	public PlayerState playerState = PlayerState.Connected;
 	public Player player = null;
+	public final boolean[][] knownTileSections;
 
 	public NetServerChild(Socket socket, NetServerManager manager, int slot) throws IOException {
 		this.socket = socket;
@@ -32,6 +33,8 @@ public class NetServerChild {
 		this.outQeue = new ArrayList<Packet>();
 		this.manager = manager;
 		this.slot = slot;
+
+		this.knownTileSections = new boolean[Server.getInstance().world.sectionsX][Server.getInstance().world.sectionsY];
 
 		this.input = new LittleEndianInputStream(this.socket.getInputStream());
 		this.output = new LittleEndianOutputStream(this.socket.getOutputStream());
@@ -80,7 +83,7 @@ public class NetServerChild {
 
 			if (packet == null) {
 				System.out.println("Unkown Packet ID: " + id);
-				disconnect("Unknown Packet ID: " + id);
+				//disconnect("Unknown Packet ID: " + id);
 			} else {
 				packet.setLength(size);
 
@@ -104,6 +107,7 @@ public class NetServerChild {
 
 			while (outQeue.size() > 0) {
 				Packet packet = outQeue.remove(0);
+				System.out.println(packet.getId());
 				packet.writePacket(output);
 			}
 		} catch (IOException e) {

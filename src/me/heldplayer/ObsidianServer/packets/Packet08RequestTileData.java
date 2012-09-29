@@ -33,43 +33,51 @@ public class Packet08RequestTileData extends Packet {
 		if (child.playerState != PlayerState.Initialized)
 			throw new UnsupportedOperationException("Client cannot send this packet at this time");
 
+		System.out.println("SpawnX: " + spawnX + "; SpawnY: " + spawnY);
+
 		World world = Server.getInstance().world;
 
 		Packet09StatusbarText packet = new Packet09StatusbarText();
-		packet.messages = 51;
-		packet.text = "Sending tile data";
+		packet.messages = 3001;
+		packet.text = "Receiving tile data";
 
 		child.addToQeue(packet);
 
 		int spawnX = this.spawnX;
 		int spawnY = this.spawnY;
 
-		if (spawnX == -1 || spawnY == -1) {
-			spawnX = Server.getInstance().world.spawnTileX;
-			spawnY = Server.getInstance().world.spawnTileY;
+		if (spawnX == -1 || spawnY == -1 || spawnX < 10 || spawnX > world.mapWidth || spawnY < 10 || spawnY > world.mapHeight) {
+			spawnX = world.spawnTileX;
+			spawnY = world.spawnTileY;
 		}
 
-		for (int y = spawnY; y < spawnY + 50; y++) {
-			Packet10TileRowData tileData = new Packet10TileRowData();
-			tileData.tileX = spawnX - 50;
-			tileData.tileY = y;
+		short sectionX = (short) (spawnX / 200);
+		short sectionY = (short) (spawnY / 150);
+		
+		System.out.println("Locals, SpawnX: " + spawnX + "; SpawnY: " + spawnY);
+		
+		System.out.println("" +
+				"SectionX: " + sectionX + "; SectionY: " + sectionY);
 
-			child.addToQeue(tileData);
+		for (short x = (short) (sectionX - 2); x < sectionX + 3; x++) {
+			for (short y = (short) (sectionY - 1); y < sectionY + 2; y++) {
+				world.terrainData.sendTerrainSections(child, x, y);
+			}
 		}
+
+		//world.terrainData.sendTerrainSections(child, sectionX, sectionY);
 
 		Packet11RecalculateAreaUV recalculatePacket = new Packet11RecalculateAreaUV();
-		recalculatePacket.startX = spawnX - 50;
-		recalculatePacket.startY = spawnY - 50;
-		recalculatePacket.endX = spawnX + 50;
-		recalculatePacket.endY = spawnY + 50;
+		recalculatePacket.startX = sectionX - 2;
+		recalculatePacket.startY = sectionY - 1;
+		recalculatePacket.endX = sectionX + 2;
+		recalculatePacket.endY = sectionY + 1;
 
 		child.addToQeue(recalculatePacket);
 
 		Packet49PlayerFirstSpawn spawnPacket = new Packet49PlayerFirstSpawn();
 
 		child.addToQeue(spawnPacket);
-
-		//}
 	}
 
 }

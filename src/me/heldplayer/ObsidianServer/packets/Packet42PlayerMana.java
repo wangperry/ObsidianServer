@@ -42,8 +42,8 @@ public class Packet42PlayerMana extends Packet {
 		if (this.maxMana > 460 || this.mana > 460)
 			child.disconnect("Invalid mana");
 
-		if (this.mana > this.maxMana)
-			child.disconnect("Invalid mana");
+		//if (this.mana > this.maxMana)
+			//child.disconnect("Invalid mana");
 
 		child.player.mana = this.mana;
 		child.player.maxHealth = this.maxMana;

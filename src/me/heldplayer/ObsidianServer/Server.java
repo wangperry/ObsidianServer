@@ -7,6 +7,7 @@ import java.util.Calendar;
 
 import me.heldplayer.ObsidianServer.util.Configuration;
 import me.heldplayer.ObsidianServer.util.ConsoleCommandReader;
+import me.heldplayer.ObsidianServer.util.ThreadStatusAnnouncer;
 import me.heldplayer.ObsidianServer.world.World;
 
 public class Server implements Runnable {
@@ -21,11 +22,13 @@ public class Server implements Runnable {
 	public World world;
 	public byte worldSize = 0;
 	public boolean isChristmas = false;
+	public final static ThreadStatusAnnouncer announcer = new ThreadStatusAnnouncer();
 
 	@Override
 	public void run() {
 		instance = this;
 		conReader = new ConsoleCommandReader();
+		announcer.start();
 		try {
 			if (!startServer()) {
 				isRunning = false;
@@ -34,6 +37,8 @@ public class Server implements Runnable {
 			System.err.println("Unexpected exception while starting the server: " + ex.getMessage());
 			ex.printStackTrace();
 			isRunning = false;
+
+			announcer.isRunning = false;
 		}
 
 		while (isRunning) {
@@ -46,6 +51,8 @@ public class Server implements Runnable {
 		}
 
 		shutdown();
+
+		System.out.println();
 	}
 
 	public boolean startServer() throws IOException {

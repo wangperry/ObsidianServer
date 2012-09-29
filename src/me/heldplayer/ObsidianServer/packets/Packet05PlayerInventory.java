@@ -42,8 +42,8 @@ public class Packet05PlayerInventory extends Packet {
 
 	@Override
 	public void handlePacket(NetServerChild child) {
-		if (child.playerState != PlayerState.Initializing)
-			throw new UnsupportedOperationException("Client cannot send this packet at this time");
+		//if (child.playerState != PlayerState.Initializing)
+		//throw new UnsupportedOperationException("Client cannot send this packet at this time");
 
 		//System.out.println("Player " + child.getSlot() + " inventory. Slot: " + inventorySlot + "; Stack: " + itemStack + "; PrefixId: " + itemPrefixId + "; Id: " + itemId);
 
