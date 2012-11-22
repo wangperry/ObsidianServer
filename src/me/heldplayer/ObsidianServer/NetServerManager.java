@@ -1,3 +1,4 @@
+
 package me.heldplayer.ObsidianServer;
 
 import java.io.IOException;
@@ -6,89 +7,90 @@ import java.net.InetAddress;
 import me.heldplayer.ObsidianServer.packets.Packet;
 
 public class NetServerManager {
-	private Server server;
-	private ConnectionListenThread listenThread;
-	protected NetServerChild[] slots;
+    private Server server;
+    private ConnectionListenThread listenThread;
+    protected NetServerChild[] slots;
 
-	public NetServerManager(Server server, int port, InetAddress address) throws IOException {
-		this.server = server;
-		slots = new NetServerChild[this.server.slots];
+    public NetServerManager(Server server, int port, InetAddress address) throws IOException {
+        this.server = server;
+        slots = new NetServerChild[this.server.slots];
 
-		this.listenThread = new ConnectionListenThread(this, port, address);
-		this.listenThread.setDaemon(true);
-		this.listenThread.start();
-	}
+        this.listenThread = new ConnectionListenThread(this, port, address);
+        this.listenThread.setDaemon(true);
+        this.listenThread.start();
+    }
 
-	public void stopConnection() {
-		listenThread.isListening = false;
-		int index = 0;
+    public void stopConnection() {
+        listenThread.isListening = false;
+        int index = 0;
 
-		for (NetServerChild child : slots) {
-			if (child == null) {
-				continue;
-			}
-			if (!child.isConnected()) {
-				slots[index] = null;
-				continue;
-			}
+        for (NetServerChild child : slots) {
+            if (child == null) {
+                continue;
+            }
+            if (!child.isConnected()) {
+                slots[index] = null;
+                continue;
+            }
 
-			child.disconnect("Server shutting down");
+            child.disconnect("Server shutting down");
 
-			index++;
-		}
-	}
+            index++;
+        }
+    }
 
-	protected void processConnections() {
-		int index = 0;
+    protected void processConnections() {
+        int index = 0;
 
-		for (NetServerChild child : slots) {
-			if (child == null) {
-				continue;
-			}
-			if (!child.isConnected()) {
-				slots[index] = null;
-				continue;
-			}
+        for (NetServerChild child : slots) {
+            if (child == null) {
+                continue;
+            }
+            if (!child.isConnected()) {
+                slots[index] = null;
+                continue;
+            }
 
-			try {
-				if (child.hasPackets()) {
-					Packet packet = child.getNextPacket();
+            try {
+                if (child.hasPackets()) {
+                    Packet packet = child.getNextPacket();
 
-					packet.handlePacket(child);
-				}
-			} catch (Exception ex) {
-				System.out.println("Failed reading packet!");
+                    packet.handlePacket(child);
+                }
+            }
+            catch (Exception ex) {
+                System.out.println("Failed reading packet!");
 
-				ex.printStackTrace();
-			}
+                ex.printStackTrace();
+            }
 
-			index++;
-		}
-	}
+            index++;
+        }
+    }
 
-	public final int getNextAvailableSlot() {
-		for (int i = 0; i < slots.length; i++) {
-			if (slots[i] == null)
-				return i;
-		}
-		return -1;
-	}
+    public final int getNextAvailableSlot() {
+        for (int i = 0; i < slots.length; i++) {
+            if (slots[i] == null)
+                return i;
+        }
+        return -1;
+    }
 
-	public void broadcastPacket(Packet packet) {
-		int index = 0;
+    public void broadcastPacket(Packet packet) {
+        int index = 0;
 
-		for (NetServerChild child : slots) {
-			if (child == null) {
-				continue;
-			}
-			if (!child.isConnected()) {
-				slots[index] = null;
-				continue;
-			}
+        for (NetServerChild child : slots) {
+            if (child == null) {
+                continue;
+            }
+            if (!child.isConnected()) {
+                slots[index] = null;
+                continue;
+            }
 
-			child.addToQeue(packet);
+            child.addToQeue(packet);
 
-			index++;
-		}
-	}
+            index++;
+        }
+    }
 }
