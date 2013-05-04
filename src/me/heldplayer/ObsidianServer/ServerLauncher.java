@@ -1,6 +1,8 @@
 
 package me.heldplayer.ObsidianServer;
 
+import java.util.logging.Level;
+
 public class ServerLauncher {
 
     /**
@@ -17,8 +19,7 @@ public class ServerLauncher {
                 Thread.sleep(500L);
             }
             catch (InterruptedException e) {
-                System.out.println("Error while sleeping!");
-                e.printStackTrace();
+                Server.log.log(Level.SEVERE, "Error while sleeping!", e);
             }
         }
 
@@ -26,7 +27,7 @@ public class ServerLauncher {
             instance.shutdown();
         }
 
-        System.out.println("Server stopped!");
+        Server.log.log(Level.INFO, "Server stopped!");
     }
 
 }

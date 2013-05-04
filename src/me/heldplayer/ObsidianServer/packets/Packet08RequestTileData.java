@@ -2,6 +2,7 @@
 package me.heldplayer.ObsidianServer.packets;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 import me.heldplayer.ObsidianServer.NetServerChild;
 import me.heldplayer.ObsidianServer.Server;
@@ -34,7 +35,7 @@ public class Packet08RequestTileData extends Packet {
         if (child.playerState != PlayerState.Initialized)
             throw new UnsupportedOperationException("Client cannot send this packet at this time");
 
-        System.out.println("SpawnX: " + spawnX + "; SpawnY: " + spawnY);
+        Server.log.log(Level.INFO, "SpawnX: " + spawnX + "; SpawnY: " + spawnY);
 
         World world = Server.getInstance().world;
 
@@ -55,9 +56,9 @@ public class Packet08RequestTileData extends Packet {
         short sectionX = (short) (spawnX / 200);
         short sectionY = (short) (spawnY / 150);
 
-        System.out.println("Locals, SpawnX: " + spawnX + "; SpawnY: " + spawnY);
+        Server.log.log(Level.INFO, "Locals, SpawnX: " + spawnX + "; SpawnY: " + spawnY);
 
-        System.out.println("" + "SectionX: " + sectionX + "; SectionY: " + sectionY);
+        Server.log.log(Level.INFO, "" + "SectionX: " + sectionX + "; SectionY: " + sectionY);
 
         for (short x = (short) (sectionX - 2); x < sectionX + 3; x++) {
             for (short y = (short) (sectionY - 1); y < sectionY + 2; y++) {

@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.logging.Level;
+
+import me.heldplayer.ObsidianServer.Server;
 
 public class Configuration {
     private HashMap<String, String> values;
@@ -29,7 +32,7 @@ public class Configuration {
 
     public void loadConfig() {
         if (!file.exists()) {
-            System.out.println("Creating new config file...");
+            Server.log.log(Level.INFO, "Creating new config file...");
 
             file.getParentFile().mkdirs();
 
@@ -37,8 +40,7 @@ public class Configuration {
                 file.createNewFile();
             }
             catch (IOException e) {
-                System.err.println("Failed loading config!");
-                e.printStackTrace();
+                Server.log.log(Level.SEVERE, "Failed loading config!", e);
                 return;
             }
         }
@@ -48,8 +50,7 @@ public class Configuration {
             reader = new BufferedReader(new FileReader(file));
         }
         catch (FileNotFoundException e) {
-            System.err.println("Failed loading config!");
-            e.printStackTrace();
+            Server.log.log(Level.SEVERE, "Failed loading config!", e);
             return;
         }
 
@@ -77,15 +78,14 @@ public class Configuration {
             reader.close();
         }
         catch (IOException e) {
-            System.err.println("Failed loading config!");
-            e.printStackTrace();
+            Server.log.log(Level.SEVERE, "Failed loading config!", e);
             return;
         }
     }
 
     public void saveConfig() {
         if (!file.exists()) {
-            System.out.println("Creating new config file...");
+            Server.log.log(Level.INFO, "Creating new config file...");
 
             file.getParentFile().mkdirs();
 
@@ -93,8 +93,7 @@ public class Configuration {
                 file.createNewFile();
             }
             catch (IOException e) {
-                System.err.println("Failed saving config!");
-                e.printStackTrace();
+                Server.log.log(Level.SEVERE, "Failed saving config!", e);
                 return;
             }
         }
@@ -104,13 +103,11 @@ public class Configuration {
             writer = new BufferedWriter(new FileWriter(file));
         }
         catch (FileNotFoundException e) {
-            System.err.println("Failed saving config!");
-            e.printStackTrace();
+            Server.log.log(Level.SEVERE, "Failed saving config!", e);
             return;
         }
         catch (IOException e) {
-            System.err.println("Failed saving config!");
-            e.printStackTrace();
+            Server.log.log(Level.SEVERE, "Failed saving config!", e);
             return;
         }
 
@@ -130,8 +127,7 @@ public class Configuration {
             writer.close();
         }
         catch (IOException e) {
-            System.err.println("Failed saving config!");
-            e.printStackTrace();
+            Server.log.log(Level.SEVERE, "Failed saving config!", e);
             return;
         }
     }

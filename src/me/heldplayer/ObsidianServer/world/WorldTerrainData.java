@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Random;
+import java.util.logging.Level;
 
 import me.heldplayer.ObsidianServer.NetServerChild;
 import me.heldplayer.ObsidianServer.Server;
@@ -71,53 +72,53 @@ public class WorldTerrainData {
     }
 
     public void loadWorld(File file) {
-        System.out.println("Loading terrain data...");
+        Server.log.log(Level.INFO, "Loading terrain data...");
 
         LittleEndianInputStream input = null;
 
         try {
             input = new LittleEndianInputStream(new FileInputStream(file));
 
-            System.out.println("World terrain data loaded!");
+            Server.log.log(Level.INFO, "World terrain data loaded!");
         }
         catch (FileNotFoundException e) {
-            System.err.println("Error loading world terrain data!");
-
-            e.printStackTrace();
+            Server.log.log(Level.SEVERE, "Error loading world terrain data!", e);
         }
         finally {
             try {
                 input.close();
             }
             catch (IOException e) {
-                System.err.println("Error closing world terrain data load stream");
-
-                e.printStackTrace();
+                Server.log.log(Level.SEVERE, "Error closing world terrain data load stream", e);
             }
         }
     }
 
     public void saveWorld(File file) {
-        System.out.println("Saving world terrain data..");
+        Server.log.log(Level.INFO, "Saving world terrain data..");
 
         LittleEndianOutputStream output = null;
 
         try {
             output = new LittleEndianOutputStream(new FileOutputStream(file));
 
-            System.out.println("World terrain data saved!");
+            for (int y = 0; y < world.mapHeight; y++) {
+                for (int x = 0; x < world.mapWidth; x++) {
+
+                }
+            }
+
+            Server.log.log(Level.INFO, "World terrain data saved!");
         }
         catch (FileNotFoundException e) {
-            e.printStackTrace();
+            Server.log.log(Level.SEVERE, "Error saving world terrain data!", e);
         }
         finally {
             try {
                 output.close();
             }
             catch (IOException e) {
-                System.err.println("Error closing world terrain data save stream");
-
-                e.printStackTrace();
+                Server.log.log(Level.SEVERE, "Error closing world terrain data save stream", e);
             }
         }
     }

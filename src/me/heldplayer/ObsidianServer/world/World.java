@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.logging.Level;
 
 import me.heldplayer.ObsidianServer.Server;
 import me.heldplayer.ObsidianServer.entities.NPC;
@@ -33,7 +34,7 @@ public class World {
     public int gameTime = 0;
     public int dayTime = 1; // Byte
     public int moonPhase = 0; // Byte
-    public int bloodMoon = 0; // Byte
+    public int bloodMoon = 1; // Byte
     public int mapWidth = 4200; // 1 = 4200; 2 = 6300; 3 = 8400
     public int mapHeight = 1200;// 1 = 1200; 2 = 1800; 3 = 2400
     public int sectionsX = mapWidth / 200;
@@ -119,22 +120,8 @@ public class World {
         this.NPCList = new NPC[32767];
     }
 
-    public void debug() {
-        for (Field field : this.getClass().getFields()) {
-            try {
-                System.out.println(field.getName() + " is set to " + field.get(this).toString());
-            }
-            catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            }
-            catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void saveWorld() {
-        System.out.println("Saving world info..");
+    public void saveWorldInfo() {
+        Server.log.log(Level.INFO, "Saving world info..");
 
         LittleEndianOutputStream output = null;
 
@@ -161,28 +148,26 @@ public class World {
             output.writeBoolean(this.hardMode);
             output.writeBoolean(this.killedBoss4);
 
-            System.out.println("World info saved!");
+            Server.log.log(Level.INFO, "World info saved!");
         }
         catch (FileNotFoundException e) {
-            e.printStackTrace();
+            Server.log.log(Level.SEVERE, "Error saving world info!", e);
         }
         catch (IOException e) {
-            e.printStackTrace();
+            Server.log.log(Level.SEVERE, "Error saving world info!", e);
         }
         finally {
             try {
                 output.close();
             }
             catch (IOException e) {
-                System.err.println("Error closing world info save stream");
-
-                e.printStackTrace();
+                Server.log.log(Level.SEVERE, "Error closing world info save stream", e);
             }
         }
     }
 
     private void loadWorldInfo() {
-        System.out.println("Loading world info...");
+        Server.log.log(Level.INFO, "Loading world info...");
 
         LittleEndianInputStream input = null;
 
@@ -211,26 +196,20 @@ public class World {
             this.hardMode = input.readBoolean();
             this.killedBoss4 = input.readBoolean();
 
-            System.out.println("World info loaded!");
+            Server.log.log(Level.INFO, "World info loaded!");
         }
         catch (FileNotFoundException e) {
-            System.err.println("Error loading world info!");
-
-            e.printStackTrace();
+            Server.log.log(Level.SEVERE, "Error loading world info!", e);
         }
         catch (IOException e) {
-            System.err.println("Error loading world info!");
-
-            e.printStackTrace();
+            Server.log.log(Level.SEVERE, "Error loading world info!", e);
         }
         finally {
             try {
                 input.close();
             }
             catch (IOException e) {
-                System.err.println("Error closing world info load stream");
-
-                e.printStackTrace();
+                Server.log.log(Level.SEVERE, "Error closing world info load stream", e);
             }
         }
     }

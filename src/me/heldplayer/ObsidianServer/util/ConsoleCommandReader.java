@@ -5,6 +5,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.logging.Level;
+
+import me.heldplayer.ObsidianServer.Server;
 
 public class ConsoleCommandReader extends Thread {
     public final ArrayList<String> consoleCommands;
@@ -28,10 +31,10 @@ public class ConsoleCommandReader extends Thread {
                 Thread.sleep(10L);
             }
             catch (InterruptedException e) {
-                e.printStackTrace();
+                Server.log.log(Level.SEVERE, "Interrupted whilst sleeping", e);
             }
             catch (IOException e) {
-                e.printStackTrace();
+                Server.log.log(Level.SEVERE, "Error reading", e);
             }
         }
     }

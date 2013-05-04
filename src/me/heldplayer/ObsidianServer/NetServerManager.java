@@ -3,6 +3,7 @@ package me.heldplayer.ObsidianServer;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.logging.Level;
 
 import me.heldplayer.ObsidianServer.packets.Packet;
 
@@ -58,10 +59,8 @@ public class NetServerManager {
                     packet.handlePacket(child);
                 }
             }
-            catch (Exception ex) {
-                System.out.println("Failed reading packet!");
-
-                ex.printStackTrace();
+            catch (Exception e) {
+                Server.log.log(Level.WARNING, "Failed reading packet!", e);
             }
 
             index++;
@@ -76,7 +75,7 @@ public class NetServerManager {
         return -1;
     }
 
-    public void broadcastPacket(Packet packet) {
+    public void broadcastPacket(Packet packet, NetServerChild origin) {
         int index = 0;
 
         for (NetServerChild child : slots) {
@@ -85,6 +84,9 @@ public class NetServerManager {
             }
             if (!child.isConnected()) {
                 slots[index] = null;
+                continue;
+            }
+            if (child == origin) {
                 continue;
             }
 

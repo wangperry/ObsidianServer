@@ -39,12 +39,12 @@ public class Packet07WorldInfo extends Packet {
         output.writeInt(world.worldId);
 
         byte flags = 0;
-        flags &= (world.shadowOrbSmashed ? 1 << 0 : 0);
-        flags &= (world.killedBoss1 ? 1 << 1 : 0);
-        flags &= (world.killedBoss2 ? 1 << 2 : 0);
-        flags &= (world.killedBoss3 ? 1 << 3 : 0);
-        flags &= (world.hardMode ? 1 << 4 : 0);
-        flags &= (world.killedBoss4 ? 1 << 5 : 0);
+        flags &= (world.shadowOrbSmashed ? 0x1 : 0);
+        flags &= (world.killedBoss1 ? 0x2 : 0);
+        flags &= (world.killedBoss2 ? 0x4 : 0);
+        flags &= (world.killedBoss3 ? 0x8 : 0);
+        flags &= (world.hardMode ? 0xF : 0);
+        flags &= (world.killedBoss4 ? 0x10 : 0);
 
         output.writeByte(flags);
 

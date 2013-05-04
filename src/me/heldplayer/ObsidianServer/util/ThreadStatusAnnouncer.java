@@ -1,6 +1,10 @@
 
 package me.heldplayer.ObsidianServer.util;
 
+import java.util.logging.Level;
+
+import me.heldplayer.ObsidianServer.Server;
+
 public class ThreadStatusAnnouncer extends Thread {
     private String message = "";
     private long time = 0L;
@@ -17,7 +21,7 @@ public class ThreadStatusAnnouncer extends Thread {
             if (isRunning && this.time + 1000L > System.currentTimeMillis()) {
                 this.time = System.currentTimeMillis();
 
-                System.out.println(message);
+                Server.log.log(Level.INFO, message);
             }
 
             try {

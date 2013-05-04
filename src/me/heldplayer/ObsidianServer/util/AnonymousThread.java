@@ -1,6 +1,10 @@
 
 package me.heldplayer.ObsidianServer.util;
 
+import java.util.logging.Level;
+
+import me.heldplayer.ObsidianServer.Server;
+
 public abstract class AnonymousThread extends Thread {
     public AnonymousThread(String name) {
         super(name);
@@ -19,7 +23,7 @@ public abstract class AnonymousThread extends Thread {
                 Thread.sleep(50L);
             }
             catch (InterruptedException e) {
-                e.printStackTrace();
+                Server.log.log(Level.SEVERE, "Interrupted whilst sleeping", e);
                 break;
             }
         }

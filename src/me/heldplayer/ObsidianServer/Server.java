@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import me.heldplayer.ObsidianServer.util.Configuration;
 import me.heldplayer.ObsidianServer.util.ConsoleCommandReader;
@@ -24,9 +26,19 @@ public class Server implements Runnable {
     public byte worldSize = 0;
     public boolean isChristmas = false;
     public final static ThreadStatusAnnouncer announcer = new ThreadStatusAnnouncer();
+    public static final Logger log = Logger.getLogger("ObsidianServer");
 
     @Override
     public void run() {
+        log.setUseParentHandlers(false);
+
+        ConsoleLogHandler handler = new ConsoleLogHandler();
+        handler.setFormatter(new LogFormatter());
+
+        log.addHandler(handler);
+        log.setLevel(Level.ALL);
+        handler.setLevel(Level.ALL);
+
         instance = this;
         conReader = new ConsoleCommandReader();
         announcer.start();
@@ -35,9 +47,8 @@ public class Server implements Runnable {
                 isRunning = false;
             }
         }
-        catch (Exception ex) {
-            System.err.println("Unexpected exception while starting the server: " + ex.getMessage());
-            ex.printStackTrace();
+        catch (Exception e) {
+            Server.log.log(Level.SEVERE, "Unexpected exception while starting the server", e);
             isRunning = false;
 
             announcer.isRunning = false;
@@ -49,7 +60,7 @@ public class Server implements Runnable {
                 Thread.sleep(100L);
             }
             catch (InterruptedException e) {
-                e.printStackTrace();
+                Server.log.log(Level.SEVERE, "Interrupted whilst sleeping", e);
             }
         }
 
@@ -98,7 +109,7 @@ public class Server implements Runnable {
             this.config.set("port", 7777);
         }
 
-        System.out.println("Starting the server on " + (!addr.isEmpty() ? addr : "*") + "; port = " + port);
+        Server.log.log(Level.INFO, "Starting the server on " + (!addr.isEmpty() ? addr : "*") + "; port = " + port);
 
         this.serverManager = new NetServerManager(this, port, inetAddr);
 
@@ -120,7 +131,7 @@ public class Server implements Runnable {
     public boolean serverLoop() {
         while (!conReader.consoleCommands.isEmpty()) {
             String command = conReader.consoleCommands.remove(0);
-            System.out.println("Command: " + command);
+            Server.log.log(Level.FINE, "Command: " + command);
 
             if (command.equalsIgnoreCase("stop"))
                 initiateShutdown();
@@ -132,9 +143,9 @@ public class Server implements Runnable {
     }
 
     protected void shutdown() {
-        System.out.println("Shutting down server...");
+        Server.log.log(Level.FINE, "Shutting down server...");
 
-        world.saveWorld();
+        world.saveWorldInfo();
 
         serverManager.stopConnection();
     }

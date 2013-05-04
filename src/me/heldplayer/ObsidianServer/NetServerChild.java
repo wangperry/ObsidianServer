@@ -4,6 +4,7 @@ package me.heldplayer.ObsidianServer;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 import me.heldplayer.ObsidianServer.entities.Player;
 import me.heldplayer.ObsidianServer.packets.Packet;
@@ -83,9 +84,11 @@ public class NetServerChild {
 
             Packet packet = Packet.getPacket(id);
 
+            Server.log.log(Level.INFO, "> " + id);
+
             if (packet == null) {
-                System.out.println("Unkown Packet ID: " + id);
-                //disconnect("Unknown Packet ID: " + id);
+                Server.log.log(Level.WARNING, "Unkown Packet ID: " + id + " (" + Integer.toHexString(id).toUpperCase() + ")");
+                disconnect("Unknown Packet ID: " + id + " (" + Integer.toHexString(id).toUpperCase() + ")");
             }
             else {
                 packet.setLength(size);
@@ -95,8 +98,9 @@ public class NetServerChild {
 
                     inQeue.add(packet);
                 }
-                catch (Exception ex) {
-                    ex.printStackTrace();
+                catch (Exception e) {
+                    Server.log.log(Level.WARNING, "Internal server error", e);
+                    disconnect("Internal Server Error");
                 }
             }
         }
@@ -108,17 +112,15 @@ public class NetServerChild {
 
     public void writePackets() {
         try {
-
             while (outQeue.size() > 0) {
                 Packet packet = outQeue.remove(0);
-                System.out.println(packet.getId());
+                Server.log.log(Level.INFO, "< " + packet.getId());
                 packet.writePacket(output);
             }
         }
         catch (IOException e) {
             if (disconnect("Internal Server Error")) {
-                System.err.println("Internal Server Error");
-                e.printStackTrace();
+                Server.log.log(Level.SEVERE, "Internal Server Error", e);
             }
         }
         catch (UnsupportedOperationException e) {
@@ -143,7 +145,7 @@ public class NetServerChild {
             flag = true;
         }
         catch (IOException e) {
-            System.err.println("Client lost connection to server");
+            Server.log.log(Level.INFO, "Client lost connection to server");
         }
         finally {
             try {
@@ -166,7 +168,7 @@ public class NetServerChild {
     }
 
     public void broadcastPacket(Packet packet) {
-        this.manager.broadcastPacket(packet);
+        this.manager.broadcastPacket(packet, this);
     }
 
 }

@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 import me.heldplayer.ObsidianServer.NetServerChild;
+import me.heldplayer.ObsidianServer.Server;
 import me.heldplayer.ObsidianServer.util.LittleEndianInputStream;
 import me.heldplayer.ObsidianServer.util.LittleEndianOutputStream;
 
@@ -51,33 +53,8 @@ public abstract class Packet {
 
                 return packet;
             }
-            catch (InstantiationException e) {
-                e.printStackTrace();
-
-                return null;
-            }
-            catch (IllegalAccessException e) {
-                e.printStackTrace();
-
-                return null;
-            }
-            catch (SecurityException e) {
-                e.printStackTrace();
-
-                return null;
-            }
-            catch (NoSuchMethodException e) {
-                e.printStackTrace();
-
-                return null;
-            }
-            catch (IllegalArgumentException e) {
-                e.printStackTrace();
-
-                return null;
-            }
-            catch (InvocationTargetException e) {
-                e.printStackTrace();
+            catch (Exception e) {
+                Server.log.log(Level.WARNING, "Couldn't make packet", e);
 
                 return null;
             }
