@@ -9,7 +9,6 @@ import net.specialattack.ObsidianServer.Server;
 import net.specialattack.ObsidianServer.network.packet.Packet;
 import net.specialattack.ObsidianServer.util.thread.ConnectionListenThread;
 
-
 public class NetServerManager {
     private Server server;
     private ConnectionListenThread listenThread;
@@ -56,7 +55,7 @@ public class NetServerManager {
             }
 
             try {
-                if (child.hasPackets()) {
+                while (child.hasPackets()) {
                     Packet packet = child.getNextPacket();
 
                     packet.handlePacket(child);
