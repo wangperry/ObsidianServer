@@ -5,7 +5,6 @@ import java.util.logging.Level;
 
 import net.specialattack.ObsidianServer.Server;
 
-
 public abstract class AnonymousThread extends Thread {
     public AnonymousThread(String name) {
         super(name);
@@ -18,7 +17,7 @@ public abstract class AnonymousThread extends Thread {
     @Override
     public void run() {
         while (this.isRunning) {
-            runTask();
+            this.runTask();
 
             try {
                 Thread.sleep(50L);
@@ -31,6 +30,6 @@ public abstract class AnonymousThread extends Thread {
     }
 
     public void stopThread() {
-        isRunning = false;
+        this.isRunning = false;
     }
 }

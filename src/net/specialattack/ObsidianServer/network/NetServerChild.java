@@ -15,7 +15,6 @@ import net.specialattack.ObsidianServer.util.io.LittleEndianInputStream;
 import net.specialattack.ObsidianServer.util.io.LittleEndianOutputStream;
 import net.specialattack.ObsidianServer.util.thread.AnonymousThread;
 
-
 public class NetServerChild {
     private Socket socket;
     private LittleEndianInputStream input;
@@ -48,10 +47,10 @@ public class NetServerChild {
             @Override
             public void runTask() {
                 try {
-                    readPackets();
+                    NetServerChild.this.readPackets();
                 }
                 catch (IOException e) {
-                    disconnect("Internal Server Error");
+                    NetServerChild.this.disconnect("Internal Server Error");
                 }
             }
         };
@@ -59,7 +58,7 @@ public class NetServerChild {
 
             @Override
             public void runTask() {
-                writePackets();
+                NetServerChild.this.writePackets();
             }
         };
 
@@ -72,17 +71,17 @@ public class NetServerChild {
     }
 
     public boolean hasPackets() {
-        return inQeue.size() > 0;
+        return this.inQeue.size() > 0;
     }
 
     public Packet getNextPacket() {
-        return inQeue.remove(0);
+        return this.inQeue.remove(0);
     }
 
     public void readPackets() throws IOException {
-        while (input.available() > 0) {
-            int size = input.readInt();
-            int id = input.readUnsignedByte();
+        while (this.input.available() > 0) {
+            int size = this.input.readInt();
+            int id = this.input.readUnsignedByte();
 
             Packet packet = Packet.getPacket(id);
 
@@ -90,43 +89,43 @@ public class NetServerChild {
 
             if (packet == null) {
                 Server.log.log(Level.WARNING, "Unkown Packet ID: " + id + " (" + Integer.toHexString(id).toUpperCase() + ")");
-                disconnect("Unknown Packet ID: " + id + " (" + Integer.toHexString(id).toUpperCase() + ")");
+                this.disconnect("Unknown Packet ID: " + id + " (" + Integer.toHexString(id).toUpperCase() + ")");
             }
             else {
                 packet.setLength(size);
 
                 try {
-                    packet.readPacket(input);
+                    packet.readPacket(this.input);
 
-                    inQeue.add(packet);
+                    this.inQeue.add(packet);
                 }
                 catch (Exception e) {
                     Server.log.log(Level.WARNING, "Internal server error", e);
-                    disconnect("Internal Server Error");
+                    this.disconnect("Internal Server Error");
                 }
             }
         }
     }
 
     public void addToQeue(Packet packet) {
-        outQeue.add(packet);
+        this.outQeue.add(packet);
     }
 
     public void writePackets() {
         try {
-            while (outQeue.size() > 0) {
-                Packet packet = outQeue.remove(0);
+            while (this.outQeue.size() > 0) {
+                Packet packet = this.outQeue.remove(0);
                 Server.log.log(Level.INFO, "< " + packet.getId());
-                packet.writePacket(output);
+                packet.writePacket(this.output);
             }
         }
         catch (IOException e) {
-            if (disconnect("Internal Server Error")) {
+            if (this.disconnect("Internal Server Error")) {
                 Server.log.log(Level.SEVERE, "Internal Server Error", e);
             }
         }
         catch (UnsupportedOperationException e) {
-            disconnect("Internal Server Error");
+            this.disconnect("Internal Server Error");
         }
 
     }
@@ -135,15 +134,15 @@ public class NetServerChild {
         Packet02DisconnectError packet = new Packet02DisconnectError();
         packet.setMessage(message);
 
-        inThread.stopThread();
-        outThread.stopThread();
+        this.inThread.stopThread();
+        this.outThread.stopThread();
 
-        isConnected = false;
+        this.isConnected = false;
 
         boolean flag = false;
 
         try {
-            packet.writePacket(output);
+            packet.writePacket(this.output);
             flag = true;
         }
         catch (IOException e) {
@@ -151,9 +150,9 @@ public class NetServerChild {
         }
         finally {
             try {
-                input.close();
-                output.close();
-                socket.close();
+                this.input.close();
+                this.output.close();
+                this.socket.close();
             }
             catch (IOException e) {}
         }
@@ -162,11 +161,11 @@ public class NetServerChild {
     }
 
     public final boolean isConnected() {
-        return isConnected;
+        return this.isConnected;
     }
 
     public int getSlot() {
-        return slot;
+        return this.slot;
     }
 
     public void broadcastPacket(Packet packet) {

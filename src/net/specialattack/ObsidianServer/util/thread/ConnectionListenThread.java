@@ -11,7 +11,6 @@ import net.specialattack.ObsidianServer.network.NetServerManager;
 import net.specialattack.ObsidianServer.network.packet.Packet02DisconnectError;
 import net.specialattack.ObsidianServer.util.io.LittleEndianOutputStream;
 
-
 public class ConnectionListenThread extends Thread {
     private final NetServerManager manager;
     public boolean isListening = false;
@@ -34,7 +33,7 @@ public class ConnectionListenThread extends Thread {
                 Socket socket = this.serverSocket.accept();
 
                 try {
-                    int slot = manager.getNextAvailableSlot();
+                    int slot = this.manager.getNextAvailableSlot();
 
                     if (slot == -1) {
                         Packet02DisconnectError packet = new Packet02DisconnectError();
@@ -52,7 +51,7 @@ public class ConnectionListenThread extends Thread {
                         continue;
                     }
 
-                    new NetServerChild(socket, manager, slot);
+                    new NetServerChild(socket, this.manager, slot);
                 }
                 catch (IOException e) {
                     Packet02DisconnectError packet = new Packet02DisconnectError();

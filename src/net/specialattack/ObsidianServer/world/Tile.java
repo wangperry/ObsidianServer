@@ -21,37 +21,48 @@ public class Tile {
 
     @Override
     public final boolean equals(Object obj) {
-        if (!(obj instanceof Tile))
+        if (!(obj instanceof Tile)) {
             return false;
+        }
 
         Tile tile = (Tile) obj;
 
-        if (this.type != tile.type)
+        if (this.type != tile.type) {
             return false;
-        if (this.wall != tile.wall)
+        }
+        if (this.wall != tile.wall) {
             return false;
-        if (this.wallFrameX != tile.wallFrameX)
+        }
+        if (this.wallFrameX != tile.wallFrameX) {
             return false;
-        if (this.wallFrameY != tile.wallFrameY)
+        }
+        if (this.wallFrameY != tile.wallFrameY) {
             return false;
-        if (this.wallFrameNumber != tile.wallFrameNumber)
+        }
+        if (this.wallFrameNumber != tile.wallFrameNumber) {
             return false;
-        if (this.wire != tile.wire)
+        }
+        if (this.wire != tile.wire) {
             return false;
-        if (this.liquid != tile.liquid)
+        }
+        if (this.liquid != tile.liquid) {
             return false;
-        if (this.frameNumber != tile.frameNumber)
+        }
+        if (this.frameNumber != tile.frameNumber) {
             return false;
-        if (this.frameX != tile.frameX)
+        }
+        if (this.frameX != tile.frameX) {
             return false;
-        if (this.frameY != tile.frameY)
+        }
+        if (this.frameY != tile.frameY) {
             return false;
+        }
 
         return true;
     }
 
     public final boolean importantTile() {
-        return Constants.tileFrameImportant[type];
+        return Constants.tileFrameImportant[this.type];
     }
 
 }

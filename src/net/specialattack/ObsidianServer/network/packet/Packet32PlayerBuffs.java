@@ -7,12 +7,11 @@ import net.specialattack.ObsidianServer.network.NetServerChild;
 import net.specialattack.ObsidianServer.util.io.LittleEndianInputStream;
 import net.specialattack.ObsidianServer.util.io.LittleEndianOutputStream;
 
-
-public class Packet50PlayerBuffs extends Packet {
+public class Packet32PlayerBuffs extends Packet {
     private int playerSlot = 0;
     private int[] buffs = new int[10];
 
-    public Packet50PlayerBuffs() {
+    public Packet32PlayerBuffs() {
         this.id = 50;
     }
 
@@ -21,20 +20,20 @@ public class Packet50PlayerBuffs extends Packet {
         this.playerSlot = input.readUnsignedByte();
 
         for (int i = 0; i < 10; i++) {
-            buffs[i] = input.readUnsignedByte();
+            this.buffs[i] = input.readUnsignedByte();
         }
     }
 
     @Override
     public void writePacket(LittleEndianOutputStream output) throws IOException {
-        setLength(12);
+        this.setLength(12);
 
         super.writePacket(output);
 
         output.writeByte(this.playerSlot);
 
         for (int i = 0; i < 10; i++) {
-            output.writeByte(buffs[i]);
+            output.writeByte(this.buffs[i]);
         }
     }
 

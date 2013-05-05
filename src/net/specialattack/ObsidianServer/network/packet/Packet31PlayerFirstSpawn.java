@@ -7,15 +7,9 @@ import net.specialattack.ObsidianServer.network.NetServerChild;
 import net.specialattack.ObsidianServer.util.io.LittleEndianInputStream;
 import net.specialattack.ObsidianServer.util.io.LittleEndianOutputStream;
 
-
-public class Packet11RecalculateAreaUV extends Packet {
-    public int startX = 0;
-    public int startY = 0;
-    public int endX = 0;
-    public int endY = 0;
-
-    public Packet11RecalculateAreaUV() {
-        id = 11;
+public class Packet31PlayerFirstSpawn extends Packet {
+    public Packet31PlayerFirstSpawn() {
+        this.id = 49;
     }
 
     @Override
@@ -25,15 +19,9 @@ public class Packet11RecalculateAreaUV extends Packet {
 
     @Override
     public void writePacket(LittleEndianOutputStream output) throws IOException {
-        setLength(17);
+        this.setLength(1);
 
         super.writePacket(output);
-
-        output.writeInt(startX);
-        output.writeInt(startY);
-        output.writeInt(endX);
-        output.writeInt(endY);
-
     }
 
     @Override

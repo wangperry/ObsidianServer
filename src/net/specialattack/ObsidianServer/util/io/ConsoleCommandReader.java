@@ -9,25 +9,24 @@ import java.util.logging.Level;
 
 import net.specialattack.ObsidianServer.Server;
 
-
 public class ConsoleCommandReader extends Thread {
     public final ArrayList<String> consoleCommands;
     private final BufferedReader bufRead;
 
     public ConsoleCommandReader() {
-        consoleCommands = new ArrayList<String>();
-        bufRead = new BufferedReader(new InputStreamReader(System.in));
-        setDaemon(true);
-        setName("Console command reader thread");
-        start();
+        this.consoleCommands = new ArrayList<String>();
+        this.bufRead = new BufferedReader(new InputStreamReader(System.in));
+        this.setDaemon(true);
+        this.setName("Console command reader thread");
+        this.start();
     }
 
     @Override
     public void run() {
         while (true) {
             try {
-                if (bufRead.ready()) {
-                    consoleCommands.add(bufRead.readLine());
+                if (this.bufRead.ready()) {
+                    this.consoleCommands.add(this.bufRead.readLine());
                 }
                 Thread.sleep(10L);
             }

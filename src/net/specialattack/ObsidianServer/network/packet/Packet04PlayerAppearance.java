@@ -10,7 +10,6 @@ import net.specialattack.ObsidianServer.network.NetServerChild;
 import net.specialattack.ObsidianServer.util.io.LittleEndianInputStream;
 import net.specialattack.ObsidianServer.util.io.LittleEndianOutputStream;
 
-
 public class Packet04PlayerAppearance extends Packet {
     private int playerSlot = 0;
     private int hairStyle = 0;
@@ -35,20 +34,27 @@ public class Packet04PlayerAppearance extends Packet {
         this.hairStyle = input.readUnsignedByte();
         this.gender = input.readUnsignedByte();
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++) {
             this.hairColor[i] = input.readUnsignedByte();
-        for (int i = 0; i < 3; i++)
+        }
+        for (int i = 0; i < 3; i++) {
             this.skinColor[i] = input.readUnsignedByte();
-        for (int i = 0; i < 3; i++)
+        }
+        for (int i = 0; i < 3; i++) {
             this.eyeColor[i] = input.readUnsignedByte();
-        for (int i = 0; i < 3; i++)
+        }
+        for (int i = 0; i < 3; i++) {
             this.shirtColor[i] = input.readUnsignedByte();
-        for (int i = 0; i < 3; i++)
+        }
+        for (int i = 0; i < 3; i++) {
             this.undershirtColor[i] = input.readUnsignedByte();
-        for (int i = 0; i < 3; i++)
+        }
+        for (int i = 0; i < 3; i++) {
             this.pantsColor[i] = input.readUnsignedByte();
-        for (int i = 0; i < 3; i++)
+        }
+        for (int i = 0; i < 3; i++) {
             this.shoeColor[i] = input.readUnsignedByte();
+        }
 
         this.difficulty = input.readUnsignedByte();
 
@@ -61,7 +67,7 @@ public class Packet04PlayerAppearance extends Packet {
 
     @Override
     public void writePacket(LittleEndianOutputStream output) throws IOException {
-        setLength(26 + this.playerName.length());
+        this.setLength(26 + this.playerName.length());
 
         super.writePacket(output);
 
@@ -69,20 +75,27 @@ public class Packet04PlayerAppearance extends Packet {
         output.writeByte(this.hairStyle);
         output.writeByte(this.gender);
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++) {
             output.writeByte(this.hairColor[i]);
-        for (int i = 0; i < 3; i++)
+        }
+        for (int i = 0; i < 3; i++) {
             output.writeByte(this.skinColor[i]);
-        for (int i = 0; i < 3; i++)
+        }
+        for (int i = 0; i < 3; i++) {
             output.writeByte(this.eyeColor[i]);
-        for (int i = 0; i < 3; i++)
+        }
+        for (int i = 0; i < 3; i++) {
             output.writeByte(this.shirtColor[i]);
-        for (int i = 0; i < 3; i++)
+        }
+        for (int i = 0; i < 3; i++) {
             output.writeByte(this.undershirtColor[i]);
-        for (int i = 0; i < 3; i++)
+        }
+        for (int i = 0; i < 3; i++) {
             output.writeByte(this.pantsColor[i]);
-        for (int i = 0; i < 3; i++)
+        }
+        for (int i = 0; i < 3; i++) {
             output.writeByte(this.shoeColor[i]);
+        }
 
         output.writeByte(this.difficulty);
 
@@ -91,8 +104,9 @@ public class Packet04PlayerAppearance extends Packet {
 
     @Override
     public void handlePacket(NetServerChild child) {
-        if (child.playerState != PlayerState.Initializing)
+        if (child.playerState != PlayerState.Initializing) {
             throw new UnsupportedOperationException("Client cannot send this packet at this time");
+        }
 
         child.player = new Player(child);
 

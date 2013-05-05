@@ -7,7 +7,6 @@ import net.specialattack.ObsidianServer.network.NetServerChild;
 import net.specialattack.ObsidianServer.util.io.LittleEndianInputStream;
 import net.specialattack.ObsidianServer.util.io.LittleEndianOutputStream;
 
-
 public class Packet05PlayerInventory extends Packet {
     private int playerSlot = 0;
     private int inventorySlot = 0;
@@ -30,7 +29,7 @@ public class Packet05PlayerInventory extends Packet {
 
     @Override
     public void writePacket(LittleEndianOutputStream output) throws IOException {
-        setLength(7);
+        this.setLength(7);
 
         super.writePacket(output);
 

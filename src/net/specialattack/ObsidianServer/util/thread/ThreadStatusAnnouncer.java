@@ -5,7 +5,6 @@ import java.util.logging.Level;
 
 import net.specialattack.ObsidianServer.Server;
 
-
 public class ThreadStatusAnnouncer extends Thread {
     private String message = "";
     private long time = 0L;
@@ -19,10 +18,10 @@ public class ThreadStatusAnnouncer extends Thread {
     @Override
     public void run() {
         while (true) {
-            if (isRunning && this.time + 1000L > System.currentTimeMillis()) {
+            if (this.isRunning && this.time + 1000L > System.currentTimeMillis()) {
                 this.time = System.currentTimeMillis();
 
-                Server.log.log(Level.INFO, message);
+                Server.log.log(Level.INFO, this.message);
             }
 
             try {
@@ -32,12 +31,19 @@ public class ThreadStatusAnnouncer extends Thread {
         }
     }
 
-    public final void setMessage(String message) {
+    public final void setMessage(String message, boolean isUpdate) {
         this.message = message;
-        if (!isRunning)
-            resetTimer();
+        if (!this.isRunning) {
+            this.resetTimer();
+        }
 
-        isRunning = !message.isEmpty();
+        this.isRunning = message != null && !message.isEmpty();
+
+        if (this.isRunning && !isUpdate) {
+            this.time = System.currentTimeMillis();
+
+            Server.log.log(Level.INFO, message);
+        }
     }
 
     public final void resetTimer() {

@@ -7,12 +7,11 @@ import net.specialattack.ObsidianServer.network.NetServerChild;
 import net.specialattack.ObsidianServer.util.io.LittleEndianInputStream;
 import net.specialattack.ObsidianServer.util.io.LittleEndianOutputStream;
 
-
 public class Packet02DisconnectError extends Packet {
     private String message = "";
 
     public Packet02DisconnectError() {
-        id = 2;
+        this.id = 2;
     }
 
     @Override
@@ -22,11 +21,11 @@ public class Packet02DisconnectError extends Packet {
 
     @Override
     public void writePacket(LittleEndianOutputStream output) throws IOException {
-        setLength(message.length() + 1);
+        this.setLength(this.message.length() + 1);
 
         super.writePacket(output);
 
-        output.writeBytes(message);
+        output.writeBytes(this.message);
     }
 
     @Override

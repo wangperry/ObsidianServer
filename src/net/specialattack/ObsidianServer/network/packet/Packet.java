@@ -3,7 +3,6 @@ package net.specialattack.ObsidianServer.network.packet;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.logging.Level;
 
@@ -11,7 +10,6 @@ import net.specialattack.ObsidianServer.Server;
 import net.specialattack.ObsidianServer.network.NetServerChild;
 import net.specialattack.ObsidianServer.util.io.LittleEndianInputStream;
 import net.specialattack.ObsidianServer.util.io.LittleEndianOutputStream;
-
 
 public abstract class Packet {
     protected int id;
@@ -27,8 +25,8 @@ public abstract class Packet {
     public abstract void readPacket(LittleEndianInputStream input) throws IOException;
 
     public void writePacket(LittleEndianOutputStream output) throws IOException {
-        output.writeInt(length);
-        output.writeByte(id);
+        output.writeInt(this.length);
+        output.writeByte(this.id);
     }
 
     public abstract void handlePacket(NetServerChild child);
@@ -40,7 +38,7 @@ public abstract class Packet {
     }
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public static Packet getPacket(int id) {
@@ -75,14 +73,14 @@ public abstract class Packet {
         packetMapping.put(7, Packet07WorldInfo.class);
         packetMapping.put(8, Packet08RequestTileData.class);
         packetMapping.put(9, Packet09StatusbarText.class);
-        packetMapping.put(10, Packet10TileRowData.class);
-        packetMapping.put(11, Packet11RecalculateAreaUV.class);
-        packetMapping.put(12, Packet12SpawnPlayer.class);
-        packetMapping.put(16, Packet16PlayerHealth.class);
-        packetMapping.put(37, Packet37RequestPassword.class);
-        packetMapping.put(38, Packet38PasswordResponse.class);
-        packetMapping.put(42, Packet42PlayerMana.class);
-        packetMapping.put(49, Packet49PlayerFirstSpawn.class);
-        packetMapping.put(50, Packet50PlayerBuffs.class);
+        packetMapping.put(10, Packet0ATileRowData.class);
+        packetMapping.put(11, Packet0BRecalculateAreaUV.class);
+        packetMapping.put(12, Packet0CSpawnPlayer.class);
+        packetMapping.put(16, Packet10PlayerHealth.class);
+        packetMapping.put(37, Packet25RequestPassword.class);
+        packetMapping.put(38, Packet26PasswordResponse.class);
+        packetMapping.put(42, Packet2APlayerMana.class);
+        packetMapping.put(49, Packet31PlayerFirstSpawn.class);
+        packetMapping.put(50, Packet32PlayerBuffs.class);
     }
 }

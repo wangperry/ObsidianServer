@@ -16,28 +16,30 @@ public class LittleEndianOutputStream extends OutputStream implements DataOutput
         this.dataOutputSteam = new DataOutputStream(out);
     }
 
+    @Override
     public final void close() throws IOException {
-        dataOutputSteam.close();
+        this.dataOutputSteam.close();
     }
 
     @Override
     public final void writeBoolean(boolean arg) throws IOException {
-        dataOutputSteam.writeBoolean(arg);
+        this.dataOutputSteam.writeBoolean(arg);
     }
 
     @Override
     public final void writeByte(int arg) throws IOException {
-        dataOutputSteam.writeByte(arg & 0xff);
+        this.dataOutputSteam.writeByte(arg & 0xff);
     }
 
     @Override
     public final void writeBytes(String arg) throws IOException {
-        dataOutputSteam.writeBytes(arg);
+        this.dataOutputSteam.writeBytes(arg);
     }
 
     public final void writeBytes(byte[] arg) throws IOException {
-        for (byte theByte : arg)
-            dataOutputSteam.writeByte(theByte);
+        for (byte theByte : arg) {
+            this.dataOutputSteam.writeByte(theByte);
+        }
     }
 
     @Override
@@ -48,25 +50,26 @@ public class LittleEndianOutputStream extends OutputStream implements DataOutput
             buffer[i] = (byte) ((arg >> (i * 8)) & 0xff);
         }
 
-        dataOutputSteam.write(buffer);
+        this.dataOutputSteam.write(buffer);
     }
 
     @Override
     public final void writeChars(String arg) throws IOException {
         char[] chars = arg.toCharArray();
 
-        for (char theChar : chars)
-            writeChar(theChar);
+        for (char theChar : chars) {
+            this.writeChar(theChar);
+        }
     }
 
     @Override
     public final void writeDouble(double arg) throws IOException {
-        writeLong(Double.doubleToLongBits(arg));
+        this.writeLong(Double.doubleToLongBits(arg));
     }
 
     @Override
     public final void writeFloat(float arg) throws IOException {
-        writeInt(Float.floatToIntBits(arg));
+        this.writeInt(Float.floatToIntBits(arg));
     }
 
     @Override
@@ -77,7 +80,7 @@ public class LittleEndianOutputStream extends OutputStream implements DataOutput
             buffer[i] = (byte) ((arg >> (i * 8)) & 0xff);
         }
 
-        dataOutputSteam.write(buffer);
+        this.dataOutputSteam.write(buffer);
     }
 
     @Override
@@ -88,7 +91,7 @@ public class LittleEndianOutputStream extends OutputStream implements DataOutput
             buffer[i] = (byte) ((arg >> (i * 8)) & 0xff);
         }
 
-        dataOutputSteam.write(buffer);
+        this.dataOutputSteam.write(buffer);
     }
 
     @Override
@@ -99,16 +102,16 @@ public class LittleEndianOutputStream extends OutputStream implements DataOutput
             buffer[i] = (byte) ((arg >> (i * 8)) & 0xff);
         }
 
-        dataOutputSteam.write(buffer);
+        this.dataOutputSteam.write(buffer);
     }
 
     @Override
     public final void writeUTF(String arg) throws IOException {
-        dataOutputSteam.writeUTF(arg);
+        this.dataOutputSteam.writeUTF(arg);
     }
 
     @Override
     public final void write(int b) throws IOException {
-        outputStream.write(b);
+        this.outputStream.write(b);
     }
 }

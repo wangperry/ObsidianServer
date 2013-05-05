@@ -9,21 +9,20 @@ import net.specialattack.ObsidianServer.network.NetServerChild;
 import net.specialattack.ObsidianServer.util.io.LittleEndianInputStream;
 import net.specialattack.ObsidianServer.util.io.LittleEndianOutputStream;
 
-
-public class Packet38PasswordResponse extends Packet {
+public class Packet26PasswordResponse extends Packet {
     private String password = "";
 
-    public Packet38PasswordResponse() {
-        id = 38;
+    public Packet26PasswordResponse() {
+        this.id = 38;
     }
 
     @Override
     public void readPacket(LittleEndianInputStream input) throws IOException {
-        byte[] buffer = new byte[length - 1];
+        byte[] buffer = new byte[this.length - 1];
 
         input.read(buffer);
 
-        password = new String(buffer);
+        this.password = new String(buffer);
     }
 
     @Override
@@ -33,8 +32,9 @@ public class Packet38PasswordResponse extends Packet {
 
     @Override
     public void handlePacket(NetServerChild child) {
-        if (child.playerState != PlayerState.Connected)
+        if (child.playerState != PlayerState.Connected) {
             throw new UnsupportedOperationException("Client cannot send this packet at this time");
+        }
 
         String password = Server.getInstance().password;
 

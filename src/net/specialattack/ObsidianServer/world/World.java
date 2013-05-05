@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.logging.Level;
 
 import net.specialattack.ObsidianServer.Server;
@@ -14,7 +13,6 @@ import net.specialattack.ObsidianServer.entities.NPC;
 import net.specialattack.ObsidianServer.entities.Player;
 import net.specialattack.ObsidianServer.util.io.LittleEndianInputStream;
 import net.specialattack.ObsidianServer.util.io.LittleEndianOutputStream;
-
 
 public class World {
     private Player[] playerList;
@@ -38,8 +36,8 @@ public class World {
     public int bloodMoon = 1; // Byte
     public int mapWidth = 4200; // 1 = 4200; 2 = 6300; 3 = 8400
     public int mapHeight = 1200;// 1 = 1200; 2 = 1800; 3 = 2400
-    public int sectionsX = mapWidth / 200;
-    public int sectionsY = mapHeight / 150;
+    public int sectionsX = this.mapWidth / 200;
+    public int sectionsY = this.mapHeight / 150;
     public int spawnTileX = 128;
     public int spawnTileY = 128;
     public double groundLevelY = 128;
@@ -72,9 +70,10 @@ public class World {
             this.mapHeight = 1200;
         break;
         }
+        this.spawnTileX = this.mapWidth / 2;
 
-        this.sectionsX = mapWidth / 200;
-        this.sectionsY = mapHeight / 150;
+        this.sectionsX = this.mapWidth / 200;
+        this.sectionsY = this.mapHeight / 150;
 
         this.dataFolder = dataFolder.getAbsoluteFile();
 
@@ -127,7 +126,7 @@ public class World {
         LittleEndianOutputStream output = null;
 
         try {
-            output = new LittleEndianOutputStream(new FileOutputStream(dataFile));
+            output = new LittleEndianOutputStream(new FileOutputStream(this.dataFile));
 
             output.writeInt(this.gameTime);
             output.writeByte(this.dayTime);
@@ -173,7 +172,7 @@ public class World {
         LittleEndianInputStream input = null;
 
         try {
-            input = new LittleEndianInputStream(new FileInputStream(dataFile));
+            input = new LittleEndianInputStream(new FileInputStream(this.dataFile));
 
             this.gameTime = input.readInt();
             this.dayTime = input.readUnsignedByte();
@@ -216,26 +215,28 @@ public class World {
     }
 
     public Player getPlayer(byte slot) {
-        if (slot <= 0 || slot >= 255)
+        if (slot <= 0 || slot >= 255) {
             return null;
-        return playerList[slot];
+        }
+        return this.playerList[slot];
     }
 
     public NPC getNPC(short slot) {
-        if (slot <= 0 || slot >= 32767)
+        if (slot <= 0 || slot >= 32767) {
             return null;
-        return NPCList[slot];
+        }
+        return this.NPCList[slot];
     }
 
     public void setPlayer(int slot, Player player) {
-        if (!(slot <= 0 || slot >= playerList.length)) {
-            playerList[slot] = player;
+        if (!(slot <= 0 || slot >= this.playerList.length)) {
+            this.playerList[slot] = player;
         }
     }
 
     public void setNPC(short slot, NPC npc) {
-        if (!(slot <= 0 || slot >= NPCList.length)) {
-            NPCList[slot] = npc;
+        if (!(slot <= 0 || slot >= this.NPCList.length)) {
+            this.NPCList[slot] = npc;
         }
     }
 

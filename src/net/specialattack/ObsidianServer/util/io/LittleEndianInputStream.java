@@ -15,107 +15,107 @@ public class LittleEndianInputStream extends InputStream implements DataInput {
     public LittleEndianInputStream(InputStream in) {
         this.inputSteam = in;
         this.dataInputSteam = new DataInputStream(in);
-        buffer = new byte[8];
+        this.buffer = new byte[8];
     }
 
     @Override
     public int available() throws IOException {
-        return dataInputSteam.available();
+        return this.dataInputSteam.available();
     }
 
     @Override
     public final short readShort() throws IOException {
-        dataInputSteam.readFully(buffer, 0, 2);
-        return (short) ((buffer[1] & 0xff) << 8 | (buffer[0] & 0xff));
+        this.dataInputSteam.readFully(this.buffer, 0, 2);
+        return (short) ((this.buffer[1] & 0xff) << 8 | (this.buffer[0] & 0xff));
     }
 
     @Override
     public final int readUnsignedShort() throws IOException {
-        dataInputSteam.readFully(buffer, 0, 2);
-        return ((buffer[1] & 0xff) << 8 | (buffer[0] & 0xff));
+        this.dataInputSteam.readFully(this.buffer, 0, 2);
+        return ((this.buffer[1] & 0xff) << 8 | (this.buffer[0] & 0xff));
     }
 
     @Override
     public final char readChar() throws IOException {
-        dataInputSteam.readFully(buffer, 0, 2);
-        return (char) ((buffer[1] & 0xff) << 8 | (buffer[0] & 0xff));
+        this.dataInputSteam.readFully(this.buffer, 0, 2);
+        return (char) ((this.buffer[1] & 0xff) << 8 | (this.buffer[0] & 0xff));
     }
 
     @Override
     public final int readInt() throws IOException {
-        dataInputSteam.readFully(buffer, 0, 4);
-        return (buffer[3]) << 24 | (buffer[2] & 0xff) << 16 | (buffer[1] & 0xff) << 8 | (buffer[0] & 0xff);
+        this.dataInputSteam.readFully(this.buffer, 0, 4);
+        return (this.buffer[3]) << 24 | (this.buffer[2] & 0xff) << 16 | (this.buffer[1] & 0xff) << 8 | (this.buffer[0] & 0xff);
     }
 
     @Override
     public final long readLong() throws IOException {
-        dataInputSteam.readFully(buffer, 0, 8);
-        return (long) (buffer[7]) << 56 | (long) (buffer[6] & 0xff) << 48 | (long) (buffer[5] & 0xff) << 40 | (long) (buffer[4] & 0xff) << 32 | (long) (buffer[3] & 0xff) << 24 | (long) (buffer[2] & 0xff) << 16 | (long) (buffer[1] & 0xff) << 8 | (long) (buffer[0] & 0xff);
+        this.dataInputSteam.readFully(this.buffer, 0, 8);
+        return (long) (this.buffer[7]) << 56 | (long) (this.buffer[6] & 0xff) << 48 | (long) (this.buffer[5] & 0xff) << 40 | (long) (this.buffer[4] & 0xff) << 32 | (long) (this.buffer[3] & 0xff) << 24 | (long) (this.buffer[2] & 0xff) << 16 | (long) (this.buffer[1] & 0xff) << 8 | (long) (this.buffer[0] & 0xff);
     }
 
     @Override
     public final float readFloat() throws IOException {
-        return Float.intBitsToFloat(readInt());
+        return Float.intBitsToFloat(this.readInt());
     }
 
     @Override
     public final double readDouble() throws IOException {
-        return Double.longBitsToDouble(readLong());
+        return Double.longBitsToDouble(this.readLong());
     }
 
     @Override
     public final int read(byte b[], int off, int len) throws IOException {
-        return inputSteam.read(b, off, len);
+        return this.inputSteam.read(b, off, len);
     }
 
     @Override
     public final void readFully(byte b[]) throws IOException {
-        dataInputSteam.readFully(b, 0, b.length);
+        this.dataInputSteam.readFully(b, 0, b.length);
     }
 
     @Override
     public final void readFully(byte b[], int off, int len) throws IOException {
-        dataInputSteam.readFully(b, off, len);
+        this.dataInputSteam.readFully(b, off, len);
     }
 
     @Override
     public final int skipBytes(int n) throws IOException {
-        return dataInputSteam.skipBytes(n);
+        return this.dataInputSteam.skipBytes(n);
     }
 
     @Override
     public final boolean readBoolean() throws IOException {
-        return dataInputSteam.readBoolean();
+        return this.dataInputSteam.readBoolean();
     }
 
     @Override
     public final byte readByte() throws IOException {
-        return dataInputSteam.readByte();
+        return this.dataInputSteam.readByte();
     }
 
     @Override
     public int read() throws IOException {
-        return inputSteam.read();
+        return this.inputSteam.read();
     }
 
     @Override
     public final int readUnsignedByte() throws IOException {
-        return dataInputSteam.readUnsignedByte();
+        return this.dataInputSteam.readUnsignedByte();
     }
 
     @Override
     @Deprecated
     public final String readLine() throws IOException {
-        return dataInputSteam.readLine();
+        return this.dataInputSteam.readLine();
     }
 
     @Override
     public final String readUTF() throws IOException {
-        return dataInputSteam.readUTF();
+        return this.dataInputSteam.readUTF();
     }
 
     @Override
     public final void close() throws IOException {
-        dataInputSteam.close();
+        this.dataInputSteam.close();
     }
 }

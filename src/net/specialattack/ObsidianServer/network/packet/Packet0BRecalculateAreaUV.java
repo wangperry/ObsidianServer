@@ -7,10 +7,14 @@ import net.specialattack.ObsidianServer.network.NetServerChild;
 import net.specialattack.ObsidianServer.util.io.LittleEndianInputStream;
 import net.specialattack.ObsidianServer.util.io.LittleEndianOutputStream;
 
+public class Packet0BRecalculateAreaUV extends Packet {
+    public int startX = 0;
+    public int startY = 0;
+    public int endX = 0;
+    public int endY = 0;
 
-public class Packet37RequestPassword extends Packet {
-    public Packet37RequestPassword() {
-        id = 37;
+    public Packet0BRecalculateAreaUV() {
+        this.id = 11;
     }
 
     @Override
@@ -20,9 +24,15 @@ public class Packet37RequestPassword extends Packet {
 
     @Override
     public void writePacket(LittleEndianOutputStream output) throws IOException {
-        setLength(1);
+        this.setLength(17);
 
         super.writePacket(output);
+
+        output.writeInt(this.startX);
+        output.writeInt(this.startY);
+        output.writeInt(this.endX);
+        output.writeInt(this.endY);
+
     }
 
     @Override

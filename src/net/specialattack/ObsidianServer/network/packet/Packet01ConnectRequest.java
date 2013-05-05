@@ -9,7 +9,6 @@ import net.specialattack.ObsidianServer.network.NetServerChild;
 import net.specialattack.ObsidianServer.util.io.LittleEndianInputStream;
 import net.specialattack.ObsidianServer.util.io.LittleEndianOutputStream;
 
-
 public class Packet01ConnectRequest extends Packet {
     private String version = "";
 
@@ -19,7 +18,7 @@ public class Packet01ConnectRequest extends Packet {
 
     @Override
     public void readPacket(LittleEndianInputStream input) throws IOException {
-        byte[] buffer = new byte[length - 1];
+        byte[] buffer = new byte[this.length - 1];
 
         input.read(buffer);
 
@@ -33,8 +32,9 @@ public class Packet01ConnectRequest extends Packet {
 
     @Override
     public void handlePacket(NetServerChild child) {
-        if (child.playerState != PlayerState.Connected)
+        if (child.playerState != PlayerState.Connected) {
             throw new UnsupportedOperationException("Client cannot send this packet at this time");
+        }
 
         if (!this.version.equalsIgnoreCase("Terraria39")) {
             child.disconnect("You are not using the same version as this server.");
@@ -52,7 +52,7 @@ public class Packet01ConnectRequest extends Packet {
                 child.playerState = PlayerState.Initializing;
             }
             else {
-                Packet37RequestPassword packet = new Packet37RequestPassword();
+                Packet25RequestPassword packet = new Packet25RequestPassword();
 
                 child.addToQeue(packet);
             }

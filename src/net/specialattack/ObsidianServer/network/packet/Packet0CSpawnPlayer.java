@@ -8,13 +8,12 @@ import net.specialattack.ObsidianServer.network.NetServerChild;
 import net.specialattack.ObsidianServer.util.io.LittleEndianInputStream;
 import net.specialattack.ObsidianServer.util.io.LittleEndianOutputStream;
 
-
-public class Packet12SpawnPlayer extends Packet {
+public class Packet0CSpawnPlayer extends Packet {
     private int playerSlot = 0;
     private int spawnX = 0;
     private int spawnY = 0;
 
-    public Packet12SpawnPlayer() {
+    public Packet0CSpawnPlayer() {
         this.id = 12;
     }
 
@@ -27,7 +26,7 @@ public class Packet12SpawnPlayer extends Packet {
 
     @Override
     public void writePacket(LittleEndianOutputStream output) throws IOException {
-        setLength(6);
+        this.setLength(6);
 
         super.writePacket(output);
 

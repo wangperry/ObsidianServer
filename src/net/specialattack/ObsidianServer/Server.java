@@ -16,7 +16,6 @@ import net.specialattack.ObsidianServer.util.io.LogFormatter;
 import net.specialattack.ObsidianServer.util.thread.ThreadStatusAnnouncer;
 import net.specialattack.ObsidianServer.world.World;
 
-
 public class Server implements Runnable {
     private static Server instance = null;
     private boolean isRunning = true;
@@ -44,21 +43,21 @@ public class Server implements Runnable {
         handler.setLevel(Level.ALL);
 
         instance = this;
-        conReader = new ConsoleCommandReader();
+        this.conReader = new ConsoleCommandReader();
         announcer.start();
         try {
-            if (!startServer()) {
-                isRunning = false;
+            if (!this.startServer()) {
+                this.isRunning = false;
             }
         }
         catch (Exception e) {
             Server.log.log(Level.SEVERE, "Unexpected exception while starting the server", e);
-            isRunning = false;
+            this.isRunning = false;
 
             announcer.isRunning = false;
         }
 
-        while (isRunning) {
+        while (this.isRunning) {
             try {
                 instance.serverLoop();
                 Thread.sleep(100L);
@@ -68,7 +67,7 @@ public class Server implements Runnable {
             }
         }
 
-        shutdown();
+        this.shutdown();
 
         System.out.println();
     }
@@ -79,8 +78,9 @@ public class Server implements Runnable {
         if (cal.get(Calendar.MONTH) == 12) {
             int day = cal.get(Calendar.DAY_OF_MONTH);
 
-            if (day >= 15 && day <= 31)
+            if (day >= 15 && day <= 31) {
                 this.isChristmas = true;
+            }
         }
 
         //--- Load config
@@ -102,8 +102,9 @@ public class Server implements Runnable {
 
         InetAddress inetAddr = null;
 
-        if (addr.isEmpty())
+        if (addr.isEmpty()) {
             inetAddr = InetAddress.getByName(addr);
+        }
 
         //--- Port
         int port = this.config.getInt("port", 7777);
@@ -133,15 +134,16 @@ public class Server implements Runnable {
     }
 
     public boolean serverLoop() {
-        while (!conReader.consoleCommands.isEmpty()) {
-            String command = conReader.consoleCommands.remove(0);
+        while (!this.conReader.consoleCommands.isEmpty()) {
+            String command = this.conReader.consoleCommands.remove(0);
             Server.log.log(Level.FINE, "Command: " + command);
 
-            if (command.equalsIgnoreCase("stop"))
-                initiateShutdown();
+            if (command.equalsIgnoreCase("stop")) {
+                this.initiateShutdown();
+            }
         }
 
-        serverManager.processConnections();
+        this.serverManager.processConnections();
 
         return true;
     }
@@ -149,17 +151,17 @@ public class Server implements Runnable {
     protected void shutdown() {
         Server.log.log(Level.FINE, "Shutting down server...");
 
-        world.saveWorldInfo();
+        //this.world.saveWorldInfo();
 
-        serverManager.stopConnection();
+        this.serverManager.stopConnection();
     }
 
     public void initiateShutdown() {
-        isRunning = false;
+        this.isRunning = false;
     }
 
     public boolean isRunning() {
-        return isRunning && !hasShutDown;
+        return this.isRunning && !this.hasShutDown;
     }
 
     public static Server getInstance() {
@@ -167,6 +169,6 @@ public class Server implements Runnable {
     }
 
     public World getWorld() {
-        return world;
+        return this.world;
     }
 }

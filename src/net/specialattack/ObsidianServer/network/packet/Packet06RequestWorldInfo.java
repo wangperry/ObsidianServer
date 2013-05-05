@@ -9,10 +9,9 @@ import net.specialattack.ObsidianServer.network.NetServerChild;
 import net.specialattack.ObsidianServer.util.io.LittleEndianInputStream;
 import net.specialattack.ObsidianServer.util.io.LittleEndianOutputStream;
 
-
 public class Packet06RequestWorldInfo extends Packet {
     public Packet06RequestWorldInfo() {
-        id = 6;
+        this.id = 6;
     }
 
     @Override
@@ -25,8 +24,9 @@ public class Packet06RequestWorldInfo extends Packet {
 
     @Override
     public void handlePacket(NetServerChild child) {
-        if (child.playerState != PlayerState.Initializing)
+        if (child.playerState != PlayerState.Initializing) {
             throw new UnsupportedOperationException("Client cannot send this packet at this time");
+        }
 
         Packet07WorldInfo packet = new Packet07WorldInfo();
         packet.setWorld(Server.getInstance().world);

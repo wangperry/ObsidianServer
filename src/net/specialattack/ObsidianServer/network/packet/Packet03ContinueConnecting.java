@@ -7,12 +7,11 @@ import net.specialattack.ObsidianServer.network.NetServerChild;
 import net.specialattack.ObsidianServer.util.io.LittleEndianInputStream;
 import net.specialattack.ObsidianServer.util.io.LittleEndianOutputStream;
 
-
 public class Packet03ContinueConnecting extends Packet {
     private int slot = 0;
 
     public Packet03ContinueConnecting() {
-        id = 3;
+        this.id = 3;
     }
 
     @Override
@@ -22,11 +21,11 @@ public class Packet03ContinueConnecting extends Packet {
 
     @Override
     public void writePacket(LittleEndianOutputStream output) throws IOException {
-        setLength(2);
+        this.setLength(2);
 
         super.writePacket(output);
 
-        output.writeByte(slot);
+        output.writeByte(this.slot);
     }
 
     @Override

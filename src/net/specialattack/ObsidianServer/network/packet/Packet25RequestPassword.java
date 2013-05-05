@@ -7,10 +7,9 @@ import net.specialattack.ObsidianServer.network.NetServerChild;
 import net.specialattack.ObsidianServer.util.io.LittleEndianInputStream;
 import net.specialattack.ObsidianServer.util.io.LittleEndianOutputStream;
 
-
-public class Packet49PlayerFirstSpawn extends Packet {
-    public Packet49PlayerFirstSpawn() {
-        id = 49;
+public class Packet25RequestPassword extends Packet {
+    public Packet25RequestPassword() {
+        this.id = 37;
     }
 
     @Override
@@ -20,7 +19,7 @@ public class Packet49PlayerFirstSpawn extends Packet {
 
     @Override
     public void writePacket(LittleEndianOutputStream output) throws IOException {
-        setLength(1);
+        this.setLength(1);
 
         super.writePacket(output);
     }

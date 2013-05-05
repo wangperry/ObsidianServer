@@ -11,15 +11,14 @@ import net.specialattack.ObsidianServer.util.io.LittleEndianInputStream;
 import net.specialattack.ObsidianServer.util.io.LittleEndianOutputStream;
 import net.specialattack.ObsidianServer.world.WorldTerrainData;
 
-
-public class Packet10TileRowData extends Packet {
+public class Packet0ATileRowData extends Packet {
     public int tileX = 0;
     public int tileY = 0;
     public short width = 0;
     public WorldTerrainData terrain = null;
 
-    public Packet10TileRowData() {
-        id = 10;
+    public Packet0ATileRowData() {
+        this.id = 10;
     }
 
     @Override
@@ -40,35 +39,45 @@ public class Packet10TileRowData extends Packet {
         int lastX = 0;
         int repeatCount = 0;
 
-        for (int i = tileX; i < width + tileX; i++) {
+        for (int i = this.tileX; i < this.width + this.tileX; i++) {
             //Tile currentTile = terrain.tiles[tileY][tileX + i];
 
             boolean equals = true;
 
             if (lastX != 0) {
-                if (terrain.type[tileY][i] != terrain.type[tileY][lastX])
+                if (this.terrain.type[this.tileY][i] != this.terrain.type[this.tileY][lastX]) {
                     equals = false;
-                if (terrain.wall[tileY][i] != terrain.wall[tileY][lastX])
+                }
+                if (this.terrain.wall[this.tileY][i] != this.terrain.wall[this.tileY][lastX]) {
                     equals = false;
-                if (terrain.wallFrameX[tileY][i] != terrain.wallFrameX[tileY][lastX])
+                }
+                if (this.terrain.wallFrameX[this.tileY][i] != this.terrain.wallFrameX[this.tileY][lastX]) {
                     equals = false;
-                if (terrain.wallFrameY[tileY][i] != terrain.wallFrameY[tileY][lastX])
+                }
+                if (this.terrain.wallFrameY[this.tileY][i] != this.terrain.wallFrameY[this.tileY][lastX]) {
                     equals = false;
-                if (terrain.wallFrameNumber[tileY][i] != terrain.wallFrameNumber[tileY][lastX])
+                }
+                if (this.terrain.wallFrameNumber[this.tileY][i] != this.terrain.wallFrameNumber[this.tileY][lastX]) {
                     equals = false;
-                if (terrain.wire[tileY][i] != terrain.wire[tileY][lastX])
+                }
+                if (this.terrain.wire[this.tileY][i] != this.terrain.wire[this.tileY][lastX]) {
                     equals = false;
-                if (terrain.liquid[tileY][i] != terrain.liquid[tileY][lastX])
+                }
+                if (this.terrain.liquid[this.tileY][i] != this.terrain.liquid[this.tileY][lastX]) {
                     equals = false;
-                if (terrain.frameNumber[tileY][i] != terrain.frameNumber[tileY][lastX])
+                }
+                if (this.terrain.frameNumber[this.tileY][i] != this.terrain.frameNumber[this.tileY][lastX]) {
                     equals = false;
-                if (terrain.frameX[tileY][i] != terrain.frameX[tileY][lastX])
+                }
+                if (this.terrain.frameX[this.tileY][i] != this.terrain.frameX[this.tileY][lastX]) {
                     equals = false;
-                if (terrain.frameY[tileY][i] != terrain.frameY[tileY][lastX])
+                }
+                if (this.terrain.frameY[this.tileY][i] != this.terrain.frameY[this.tileY][lastX]) {
                     equals = false;
+                }
             }
 
-            if (equals) {
+            if (equals && i != this.width + this.tileX) {
                 repeatCount++;
             }
             else {
@@ -78,39 +87,43 @@ public class Packet10TileRowData extends Packet {
                 }
                 byte flags = 0;
 
-                if (terrain.active[tileY][i])
+                if (this.terrain.active[this.tileY][i]) {
                     flags++;
-                if (terrain.wall[tileY][i] > 0)
+                }
+                if (this.terrain.wall[this.tileY][i] > 0) {
                     flags += 4;
-                if (terrain.liquid[tileY][i] > 0)
+                }
+                if (this.terrain.liquid[this.tileY][i] > 0) {
                     flags += 8;
-                if (terrain.wire[tileY][i])
+                }
+                if (this.terrain.wire[this.tileY][i]) {
                     flags += 16;
+                }
 
                 outputStream.writeByte(flags);
 
-                if (terrain.active[tileY][i]) {
-                    outputStream.writeByte(terrain.type[tileY][i]);
-                    if (Constants.tileFrameImportant[terrain.type[tileY][i]]) {
-                        outputStream.writeShort(terrain.frameX[tileY][i]);
-                        outputStream.writeShort(terrain.frameY[tileY][i]);
+                if (this.terrain.active[this.tileY][i]) {
+                    outputStream.writeByte(this.terrain.type[this.tileY][i]);
+                    if (Constants.tileFrameImportant[this.terrain.type[this.tileY][i]]) {
+                        outputStream.writeShort(this.terrain.frameX[this.tileY][i]);
+                        outputStream.writeShort(this.terrain.frameY[this.tileY][i]);
                     }
                 }
 
-                if (terrain.wall[tileY][i] > 0) {
-                    outputStream.writeByte(terrain.wall[tileY][i]);
+                if (this.terrain.wall[this.tileY][i] > 0) {
+                    outputStream.writeByte(this.terrain.wall[this.tileY][i]);
                 }
 
-                if (terrain.liquid[tileY][i] > 0) {
-                    outputStream.writeByte(terrain.liquid[tileY][i]);
-                    outputStream.writeBoolean(terrain.lava[tileY][i]);
+                if (this.terrain.liquid[this.tileY][i] > 0) {
+                    outputStream.writeByte(this.terrain.liquid[this.tileY][i]);
+                    outputStream.writeBoolean(this.terrain.lava[this.tileY][i]);
                 }
 
             }
             lastX = i;
         }
 
-        setLength(1 + 2 + 4 + 4 + inputStream.available());
+        this.setLength(1 + 2 + 4 + 4 + inputStream.available());
 
         super.writePacket(output);
 
@@ -125,7 +138,6 @@ public class Packet10TileRowData extends Packet {
             inputPStr.close();
         }
         catch (Exception ex) {}
-
     }
 
     @Override

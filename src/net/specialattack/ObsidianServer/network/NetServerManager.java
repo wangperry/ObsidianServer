@@ -16,7 +16,7 @@ public class NetServerManager {
 
     public NetServerManager(Server server, int port, InetAddress address) throws IOException {
         this.server = server;
-        slots = new NetServerChild[this.server.slots];
+        this.slots = new NetServerChild[this.server.slots];
 
         this.listenThread = new ConnectionListenThread(this, port, address);
         this.listenThread.setDaemon(true);
@@ -24,15 +24,15 @@ public class NetServerManager {
     }
 
     public void stopConnection() {
-        listenThread.isListening = false;
+        this.listenThread.isListening = false;
         int index = 0;
 
-        for (NetServerChild child : slots) {
+        for (NetServerChild child : this.slots) {
             if (child == null) {
                 continue;
             }
             if (!child.isConnected()) {
-                slots[index] = null;
+                this.slots[index] = null;
                 continue;
             }
 
@@ -45,12 +45,12 @@ public class NetServerManager {
     public void processConnections() {
         int index = 0;
 
-        for (NetServerChild child : slots) {
+        for (NetServerChild child : this.slots) {
             if (child == null) {
                 continue;
             }
             if (!child.isConnected()) {
-                slots[index] = null;
+                this.slots[index] = null;
                 continue;
             }
 
@@ -70,9 +70,10 @@ public class NetServerManager {
     }
 
     public final int getNextAvailableSlot() {
-        for (int i = 0; i < slots.length; i++) {
-            if (slots[i] == null)
+        for (int i = 0; i < this.slots.length; i++) {
+            if (this.slots[i] == null) {
                 return i;
+            }
         }
         return -1;
     }
@@ -80,12 +81,12 @@ public class NetServerManager {
     public void broadcastPacket(Packet packet, NetServerChild origin) {
         int index = 0;
 
-        for (NetServerChild child : slots) {
+        for (NetServerChild child : this.slots) {
             if (child == null) {
                 continue;
             }
             if (!child.isConnected()) {
-                slots[index] = null;
+                this.slots[index] = null;
                 continue;
             }
             if (child == origin) {
